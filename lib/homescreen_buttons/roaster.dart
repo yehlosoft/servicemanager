@@ -260,7 +260,7 @@ class _RoasterState extends State<Roaster> {
                                               backgroundColor:
                                                   Colors.red[100]))),
                                 ),
-                                SizedBox(height: 10)
+                                SizedBox(height: 5)
                               ],
                             )
                           : (DateTime(a.year, a.month, a.day)
@@ -303,7 +303,7 @@ class _RoasterState extends State<Roaster> {
                                       color:
                                           Color(0XFF8080C5).withOpacity(0.19),
                                     ),
-                                    SizedBox(height: 10)
+                                    SizedBox(height: 5)
                                   ],
                                 )));
                 },
@@ -320,57 +320,64 @@ class _RoasterState extends State<Roaster> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              "Status: ",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  bottomLeft: Radius.circular(20),
-                ),
-                color: Colors.red.withOpacity(0.42),
-              ),
-              alignment: Alignment.center,
-              height: 25,
-              width: 100,
-              child: Text(
-                "   $label  ".toUpperCase(),
+        Container(
+          padding: EdgeInsets.only(top: 10.0),
+          color: Color(0xfff4f5f9),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "Status : ",
                 style: TextStyle(
-                  color: zz,
-                  fontSize: 18,
-                  fontFamily: "Norwester",
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-          ],
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                  ),
+                  color: Colors.red.withOpacity(0.42),
+                ),
+                alignment: Alignment.center,
+                height: 25,
+                width: 100,
+                child: Text(
+                  "   $label  ".toUpperCase(),
+                  style: TextStyle(
+                    color: zz,
+                    fontSize: 18,
+                    fontFamily: "Norwester",
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         Container(
-          height: 60,
-          color: Color(0XFFFDFFFC).withOpacity(0.6),
+          height: 70,
+          color: Color(0XFFf4f5f9).withOpacity(0.6),
           padding: EdgeInsets.only(left: 10, right: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  tl("SET", setname),
-                  tl(
-                      "DATE",
-                      datename.year.toString() +
-                          "-" +
-                          datename.month.toString() +
-                          "-" +
-                          datename.day.toString())
-                ],
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    tl("SET", setname),
+                    tl(
+                        "DATE",
+                        datename.year.toString() +
+                            "-" +
+                            datename.month.toString() +
+                            "-" +
+                            datename.day.toString())
+                  ],
+                ),
               ),
               Row(
                 children: [
