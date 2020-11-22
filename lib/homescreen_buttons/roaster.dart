@@ -343,12 +343,17 @@ class _RoasterState extends State<Roaster> {
                 alignment: Alignment.center,
                 height: 25,
                 width: 100,
-                child: Text(
-                  "   $label  ".toUpperCase(),
-                  style: TextStyle(
-                    color: zz,
-                    fontSize: 18,
-                    fontFamily: "Norwester",
+                child: GestureDetector(
+                  onTap: () {
+                    print(zz);
+                  },
+                  child: Text(
+                    "   $label  ".toUpperCase(),
+                    style: TextStyle(
+                      color: zz,
+                      fontSize: 18,
+                      fontFamily: "Norwester",
+                    ),
                   ),
                 ),
               ),
@@ -395,7 +400,10 @@ class _RoasterState extends State<Roaster> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
-                        child: Icon(Icons.edit, size: 15),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 5.0),
+                          child: Icon(Icons.edit, size: 15),
+                        ),
                         onTap: () {
                           var snh, snm, sfh, sfm;
                           showTimePicker(

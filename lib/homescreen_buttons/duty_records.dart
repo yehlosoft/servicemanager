@@ -22,6 +22,15 @@ class DutyRecords extends StatefulWidget {
 class _DutyRecordsState extends State<DutyRecords> {
   int a = 1;
   List getDuty;
+  List result;
+
+  String dateValue = 'Date';
+  String setValue = 'Set no';
+  String typeValue = 'Type';
+  List<String> dateItems = ["Date"];
+  List<String> setItems = ["Set no"];
+  List<String> typeItems = ["Type"];
+
   DutyRecordsList demo = DutyRecordsList();
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
@@ -29,6 +38,7 @@ class _DutyRecordsState extends State<DutyRecords> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Color(0xFF011627),
       extendBodyBehindAppBar: false,
@@ -137,6 +147,127 @@ class _DutyRecordsState extends State<DutyRecords> {
                   "duty records",
                 ),
               ),
+              Container(
+                width: screenWidth,
+                height: screenHeight * 0.065,
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: screenHeight * 0.05,
+                        width: screenWidth * 0.28,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Colors.red[100],
+                        ),
+                        child: DropdownButton<String>(
+                          value: dateValue,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.transparent,
+                          ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              dateValue = newValue;
+                              print(dateValue);
+                            });
+                          },
+                          items: dateItems.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      Container(
+                        height: screenHeight * 0.05,
+                        alignment: Alignment.center,
+                        width: screenWidth * 0.2,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Colors.red[100],
+                        ),
+                        child: DropdownButton<String>(
+                          value: setValue,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.transparent,
+                          ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              setValue = newValue;
+                              print(setValue);
+                            });
+                          },
+                          items: setItems.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      Container(
+                        height: screenHeight * 0.05,
+                        width: screenWidth * 0.35,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Colors.red[100],
+                        ),
+                        child: DropdownButton<String>(
+                          value: typeValue,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 20,
+                          elevation: 16,
+                          style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.transparent,
+                          ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              typeValue = newValue;
+                              print(typeValue);
+                            });
+                          },
+                          items: typeItems.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 2,
+              ),
               Expanded(
                 child: Query(
                     options: QueryOptions(
@@ -162,6 +293,22 @@ class _DutyRecordsState extends State<DutyRecords> {
 
                       getDuty = result.data["GetAllDutyRecordByUser"];
 
+                      for (int i = 0; i < getDuty.length; i++) {
+                        var datename =
+                            DateTime.parse("${getDuty[i]["duty_date"]}")
+                                .toLocal();
+                        String date = datename.year.toString() +
+                            "-" +
+                            datename.month.toString() +
+                            "-" +
+                            datename.day.toString();
+                        dateItems.add(date);
+                        dateItems = dateItems.toSet().toList();
+                        setItems.add("${getDuty[i]["setno"]}");
+                        setItems = setItems.toSet().toList();
+                        typeItems.add("${getDuty[i]["recordtype"]}");
+                        typeItems = typeItems.toSet().toList();
+                      }
                       return Column(
                         children: [
                           Expanded(
@@ -279,13 +426,32 @@ class _DutyRecordsState extends State<DutyRecords> {
                                               width: double.infinity,
                                               padding: EdgeInsets.only(
                                                   left: 10, right: 10),
-                                              child: AutoSizeText(
-                                                  getDuty[i]["recordtext"],
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: Colors.blueGrey,
-                                                    fontWeight: FontWeight.w600,
-                                                  ))),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                  left: 8.0,
+                                                  right: 8.0,
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    AutoSizeText(
+                                                      getDuty[i]["recordtext"],
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.blueGrey,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                    Icon(
+                                                      Icons.edit,
+                                                      size: 20,
+                                                    )
+                                                  ],
+                                                ),
+                                              )),
                                           //SizedBox(height:5),
                                         ],
                                       ),
