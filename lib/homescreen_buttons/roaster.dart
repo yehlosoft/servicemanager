@@ -67,6 +67,7 @@ class _RoasterFState extends State<RoasterF> {
                 return Center(child: CircularProgressIndicator());
 
               getR = result.data["getUserRoasterslist"];
+              print("Calledddd");
 
               return Roaster(getR: getR, uid: widget.uid);
             }),
@@ -78,7 +79,7 @@ class _RoasterFState extends State<RoasterF> {
 class Roaster extends StatefulWidget {
   final List getR;
   final String uid;
-  const Roaster({Key key, this.getR, this.uid}) : super(key: key);
+  const Roaster({Key key, this.uid, this.getR}) : super(key: key);
   @override
   _RoasterState createState() => _RoasterState();
 }
@@ -86,6 +87,8 @@ class Roaster extends StatefulWidget {
 class _RoasterState extends State<Roaster> {
   String sidate, searchLabel = "SEARCH ROASTER";
   int option = 1;
+  List refreshedgetR;
+  int i = 0;
   List getSetforRoaster, trainListR;
   String v, vv;
   String az,
@@ -96,6 +99,7 @@ class _RoasterState extends State<Roaster> {
       nDH = "",
       scode = "",
       ecode = "";
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
@@ -180,133 +184,128 @@ class _RoasterState extends State<Roaster> {
               ),
               setSearch(),
               Expanded(
-                  child: ListView.builder(
-                itemCount: widget.getR.length,
-                itemBuilder: (context, i) {
-                  var a = DateTime.parse("${widget.getR[i]["duty_date"]}")
-                      .toLocal();
-                  return GestureDetector(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  backgroundColor: Colors.white,
-                                  contentPadding: EdgeInsets.all(5),
-                                  content: Container(
-                                      height: 400,
-                                      width: screenWidth,
-                                      child: Copy(rid: widget.getR[i]["_id"])),
-                                  title: Center(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: Color(0xFF011627),
-                                      ),
-                                      alignment: Alignment.center,
-                                      height: 30,
-                                      width: 180,
-                                      child: Text(
-                                        '    Roaster Details    '.toUpperCase(),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 17,
-                                          fontFamily: "Roboto",
+                  child: RefreshIndicator(
+                onRefresh: () async {
+                  print("refreshed");
+                  await _refresh_roaster_body();
+                },
+                child: ListView.builder(
+                  itemCount: widget.getR.length,
+                  itemBuilder: (context, i) {
+                    var a = DateTime.parse("${widget.getR[i]["duty_date"]}")
+                        .toLocal();
+                    return GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    contentPadding: EdgeInsets.all(5),
+                                    content: Container(
+                                        height: 400,
+                                        width: screenWidth,
+                                        child:
+                                            Copy(rid: widget.getR[i]["_id"])),
+                                    title: Center(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color: Color(0xFF011627),
+                                        ),
+                                        alignment: Alignment.center,
+                                        height: 30,
+                                        width: 180,
+                                        child: Text(
+                                          '    Roaster Details    '
+                                              .toUpperCase(),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 17,
+                                            fontFamily: "Roboto",
+                                          ),
                                         ),
                                       ),
                                     ),
+                                    actions: [
+                                      FlatButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: Text("Close"))
+                                    ],
+                                  ));
+                        },
+                        child: DateTime(a.year, a.month, a.day)
+                                    .compareTo(DateTime(
+                                  DateTime.now().year,
+                                  DateTime.now().month,
+                                  DateTime.now().day,
+                                )) ==
+                                0
+                            ? Column(
+                                children: [
+                                  roasterlist(
+                                      "   ongoing   ",
+                                      widget.getR[i]["setno"],
+                                      widget.getR[i]["actual_sign_on"],
+                                      widget.getR[i]["actual_sign_off"],
+                                      widget.getR[i]["user"],
+                                      widget.getR[i]["_id"],
+                                      a,
+                                      Colors.green[800]),
+                                  Container(
+                                    height: 1.5,
+                                    width: double.infinity,
+                                    color: Color(0XFF8080C5).withOpacity(0.19),
                                   ),
-                                  actions: [
-                                    FlatButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text("Close"))
-                                  ],
-                                ));
-                      },
-                      child: DateTime(a.year, a.month, a.day)
-                                  .compareTo(DateTime(
-                                DateTime.now().year,
-                                DateTime.now().month,
-                                DateTime.now().day,
-                              )) ==
-                              0
-                          ? Column(
-                              children: [
-                                roasterlist(
-                                    "   ongoing   ",
-                                    widget.getR[i]["setno"],
-                                    widget.getR[i]["actual_sign_on"],
-                                    widget.getR[i]["actual_sign_off"],
-                                    widget.getR[i]["user"],
-                                    widget.getR[i]["_id"],
-                                    a,
-                                    Colors.green[800]),
-                                Container(
-                                  height: 1.5,
-                                  width: double.infinity,
-                                  color: Color(0XFF8080C5).withOpacity(0.19),
-                                ),
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: GestureDetector(
-                                      onTap: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (_) => AddDuty(
-                                                  did: widget.uid,
-                                                  drid: widget.getR[i]
-                                                      ["_id"]))),
-                                      child: Text(" Add to Duty Records  ",
-                                          style: TextStyle(
-                                              backgroundColor:
-                                                  Colors.red[100]))),
-                                ),
-                                SizedBox(height: 5)
-                              ],
-                            )
-                          : (DateTime(a.year, a.month, a.day)
-                                      .compareTo(DateTime.now()) ==
-                                  1
-                              ? Column(
-                                  children: [
-                                    roasterlist(
-                                        " upcoming ",
-                                        widget.getR[i]["setno"],
-                                        widget.getR[i]["actual_sign_on"],
-                                        widget.getR[i]["actual_sign_off"],
-                                        widget.getR[i]["user"],
-                                        widget.getR[i]["_id"],
-                                        a,
-                                        Colors.red[900]),
-                                    Container(
-                                      height: 1.5,
-                                      width: double.infinity,
-                                      color:
-                                          Color(0XFF8080C5).withOpacity(0.19),
-                                    ),
-                                    SizedBox(height: 10)
-                                  ],
-                                )
-                              : Column(
-                                  children: [
-                                    roasterlist(
-                                        "completed",
-                                        widget.getR[i]["setno"],
-                                        widget.getR[i]["actual_sign_on"],
-                                        widget.getR[i]["actual_sign_off"],
-                                        widget.getR[i]["user"],
-                                        widget.getR[i]["_id"],
-                                        a,
-                                        Color(0XFF47525E)),
-                                    Container(
-                                      height: 1.5,
-                                      width: double.infinity,
-                                      color:
-                                          Color(0XFF8080C5).withOpacity(0.19),
-                                    ),
-                                    SizedBox(height: 5)
-                                  ],
-                                )));
-                },
+                                  SizedBox(height: 5)
+                                ],
+                              )
+                            : (DateTime(a.year, a.month, a.day)
+                                        .compareTo(DateTime.now()) ==
+                                    1
+                                ? Column(
+                                    children: [
+                                      roasterlist(
+                                          " upcoming ",
+                                          widget.getR[i]["setno"],
+                                          widget.getR[i]["actual_sign_on"],
+                                          widget.getR[i]["actual_sign_off"],
+                                          widget.getR[i]["user"],
+                                          widget.getR[i]["_id"],
+                                          a,
+                                          Colors.red[900]),
+                                      Container(
+                                        height: 1.5,
+                                        width: double.infinity,
+                                        color:
+                                            Color(0XFF8080C5).withOpacity(0.19),
+                                      ),
+                                      SizedBox(height: 10)
+                                    ],
+                                  )
+                                : Column(
+                                    children: [
+                                      roasterlist(
+                                          "completed",
+                                          widget.getR[i]["setno"],
+                                          widget.getR[i]["actual_sign_on"],
+                                          widget.getR[i]["actual_sign_off"],
+                                          widget.getR[i]["user"],
+                                          widget.getR[i]["_id"],
+                                          a,
+                                          Color(0XFF47525E)),
+                                      Container(
+                                        height: 1.5,
+                                        width: double.infinity,
+                                        color:
+                                            Color(0XFF8080C5).withOpacity(0.19),
+                                      ),
+                                      SizedBox(height: 5)
+                                    ],
+                                  )));
+                  },
+                ),
               )),
               SizedBox(height: 80),
             ],
@@ -442,6 +441,36 @@ class _RoasterState extends State<Roaster> {
             ],
           ),
         ),
+        Container(
+          child: "$label".toString().toLowerCase() == "   ongoing   "
+              ? GestureDetector(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => AddDuty(
+                              did: widget.uid,
+                              drid: widget.getR[userid]["_id"]))),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.red[100],
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          )),
+                      width: 150,
+                      alignment: Alignment.center,
+                      height: 20,
+                      child: Text(
+                        " Add to Duty Records  ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12),
+                      ),
+                    ),
+                  ))
+              : Container(),
+        )
       ],
     );
   }
@@ -464,19 +493,19 @@ class _RoasterState extends State<Roaster> {
           // ignore: deprecated_member_use
           options: QueryOptions(
             document: r"""
-            query getS{
-              getAllSets{
-                _id
-                setno
-                start_station_code
-                end_station_code
-                sign_on
-                sign_off
-                duty_hrs
-                distance
-                ndh
-              }
-            }""",
+                              query getS{
+                                getAllSets{
+                                  _id
+                                  setno
+                                  start_station_code
+                                  end_station_code
+                                  sign_on
+                                  sign_off
+                                  duty_hrs
+                                  distance
+                                  ndh
+                                }
+                              }""",
           ),
           builder: (
             QueryResult result, {
@@ -705,20 +734,22 @@ class _RoasterState extends State<Roaster> {
       client: client,
       child: Query(
           // ignore: deprecated_member_use
-          options: QueryOptions(document: r"""
-            query getS($details:String!){
-              getTrainsbySetno(details:$details){
-                _id
-                setno
-                train_no
-                start_station_code
-                end_station_code
-                start_on
-                change_on
-                halts_at
-                train_type
-              }
-            }""", variables: <String, dynamic>{"details": "$az"}),
+          options: QueryOptions(
+              document: r"""
+                              query getS($details:String!){
+                                getTrainsbySetno(details:$details){
+                                  _id
+                                  setno
+                                  train_no
+                                  start_station_code
+                                  end_station_code
+                                  start_on
+                                  change_on
+                                  halts_at
+                                  train_type
+                                }
+                              }""",
+              variables: <String, dynamic>{"details": "$az"}),
           builder: (
             QueryResult result, {
             Refetch refetch,
@@ -1246,6 +1277,13 @@ class _RoasterState extends State<Roaster> {
           )
         ]));
   }
+}
+
+// ignore: non_constant_identifier_names
+Future<Null> _refresh_roaster_body() async {
+  await Future.delayed(Duration(seconds: 2));
+
+  return null;
 }
 
 class Mut1 extends StatefulWidget {

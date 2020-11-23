@@ -30,10 +30,18 @@ class _DutyRecordsState extends State<DutyRecords> {
   List<String> dateItems = ["Date"];
   List<String> setItems = ["Set no"];
   List<String> typeItems = ["Type"];
+  List<String> filteredItems = [];
 
   DutyRecordsList demo = DutyRecordsList();
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
@@ -147,131 +155,9 @@ class _DutyRecordsState extends State<DutyRecords> {
                   "duty records",
                 ),
               ),
-              Container(
-                width: screenWidth,
-                height: screenHeight * 0.065,
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        height: screenHeight * 0.05,
-                        width: screenWidth * 0.28,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          color: Colors.red[100],
-                        ),
-                        child: DropdownButton<String>(
-                          value: dateValue,
-                          icon: Icon(Icons.arrow_drop_down),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: TextStyle(
-                            color: Colors.blueGrey,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.transparent,
-                          ),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              dateValue = newValue;
-                              print(dateValue);
-                            });
-                          },
-                          items: dateItems.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      Container(
-                        height: screenHeight * 0.05,
-                        alignment: Alignment.center,
-                        width: screenWidth * 0.2,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          color: Colors.red[100],
-                        ),
-                        child: DropdownButton<String>(
-                          value: setValue,
-                          icon: Icon(Icons.arrow_drop_down),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: TextStyle(
-                            color: Colors.blueGrey,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.transparent,
-                          ),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              setValue = newValue;
-                              print(setValue);
-                            });
-                          },
-                          items: setItems.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      Container(
-                        height: screenHeight * 0.05,
-                        width: screenWidth * 0.35,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          color: Colors.red[100],
-                        ),
-                        child: DropdownButton<String>(
-                          value: typeValue,
-                          icon: Icon(Icons.arrow_drop_down),
-                          iconSize: 20,
-                          elevation: 16,
-                          style: TextStyle(
-                            color: Colors.blueGrey,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.transparent,
-                          ),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              typeValue = newValue;
-                              print(typeValue);
-                            });
-                          },
-                          items: typeItems.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 2,
-              ),
-              Expanded(
-                child: Query(
-                    options: QueryOptions(
-                        document: r"""
+              Query(
+                  options: QueryOptions(
+                      document: r"""
                       query GetAllDutyRecordByUser($_id:ID!){
                         GetAllDutyRecordByUser(_id:$_id){
                           _id
@@ -282,7 +168,170 @@ class _DutyRecordsState extends State<DutyRecords> {
                          recordtext
                         }
                       }""",
-                        variables: <String, dynamic>{"_id": "${widget.uid}"}),
+                      variables: <String, dynamic>{"_id": "${widget.uid}"}),
+                  builder: (
+                    QueryResult result, {
+                    Refetch refetch,
+                    FetchMore fetchMore,
+                  }) {
+                    if (result.loading) return Center();
+
+                    getDuty = result.data["GetAllDutyRecordByUser"];
+
+                    for (int i = 0; i < getDuty.length; i++) {
+                      var datename =
+                          DateTime.parse("${getDuty[i]["duty_date"]}")
+                              .toLocal();
+                      String date = datename.year.toString() +
+                          "-" +
+                          datename.month.toString() +
+                          "-" +
+                          datename.day.toString();
+                      dateItems.add(date);
+                      dateItems = dateItems.toSet().toList();
+                      setItems.add("${getDuty[i]["setno"]}");
+                      setItems = setItems.toSet().toList();
+                      typeItems.add("${getDuty[i]["recordtype"]}");
+                      typeItems = typeItems.toSet().toList();
+                    }
+                    return Container(
+                      width: screenWidth,
+                      height: screenHeight * 0.065,
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              height: screenHeight * 0.05,
+                              width: screenWidth * 0.28,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25),
+                                color: Colors.grey[300],
+                              ),
+                              child: DropdownButton<String>(
+                                value: dateValue,
+                                icon: Icon(Icons.arrow_drop_down),
+                                iconSize: 24,
+                                elevation: 16,
+                                style: TextStyle(
+                                  color: Colors.blueGrey,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.transparent,
+                                ),
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    dateValue = newValue;
+                                    print(dateValue);
+                                  });
+                                },
+                                items: dateItems.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                            Container(
+                              height: screenHeight * 0.05,
+                              alignment: Alignment.center,
+                              width: screenWidth * 0.2,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25),
+                                color: Colors.grey[300],
+                              ),
+                              child: DropdownButton<String>(
+                                value: setValue,
+                                icon: Icon(Icons.arrow_drop_down),
+                                iconSize: 24,
+                                elevation: 16,
+                                style: TextStyle(
+                                  color: Colors.blueGrey,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.transparent,
+                                ),
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    setValue = newValue;
+                                    print(setValue);
+                                  });
+                                },
+                                items: setItems.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                            Container(
+                              height: screenHeight * 0.05,
+                              width: screenWidth * 0.35,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25),
+                                color: Colors.grey[300],
+                              ),
+                              child: DropdownButton<String>(
+                                value: typeValue,
+                                icon: Icon(Icons.arrow_drop_down),
+                                iconSize: 20,
+                                elevation: 16,
+                                style: TextStyle(
+                                  color: Colors.blueGrey,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.transparent,
+                                ),
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    typeValue = newValue;
+                                    print(typeValue);
+                                  });
+                                },
+                                items: typeItems.map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+              SizedBox(
+                height: 2,
+              ),
+              Expanded(
+                child: Query(
+                    options: QueryOptions(
+                      document: r"""
+                      query GetAllDutyRecordByUser($_id:ID!){
+                        GetAllDutyRecordByUser(_id:$_id){
+                          _id
+                          user
+                          setno
+                         duty_date
+                         recordtype
+                         recordtext
+                        }
+                      }""",
+                      variables: <String, dynamic>{"_id": "${widget.uid}"},
+                    ),
                     builder: (
                       QueryResult result, {
                       Refetch refetch,
@@ -290,180 +339,196 @@ class _DutyRecordsState extends State<DutyRecords> {
                     }) {
                       if (result.loading)
                         return Center(child: CircularProgressIndicator());
-
-                      getDuty = result.data["GetAllDutyRecordByUser"];
-
-                      for (int i = 0; i < getDuty.length; i++) {
-                        var datename =
-                            DateTime.parse("${getDuty[i]["duty_date"]}")
-                                .toLocal();
-                        String date = datename.year.toString() +
-                            "-" +
-                            datename.month.toString() +
-                            "-" +
-                            datename.day.toString();
-                        dateItems.add(date);
-                        dateItems = dateItems.toSet().toList();
-                        setItems.add("${getDuty[i]["setno"]}");
-                        setItems = setItems.toSet().toList();
-                        typeItems.add("${getDuty[i]["recordtype"]}");
-                        typeItems = typeItems.toSet().toList();
-                      }
                       return Column(
                         children: [
                           Expanded(
-                            child: ListView.builder(
-                              itemCount: getDuty.length,
-                              // children:[dutySection("Editable Records",editable_records,),
-                              // dutySection("Important Records",important_records,),
-                              // dutySection("Unusual Records",unusual_records,),],
-                              itemBuilder: (context, i) {
-                                var datename =
-                                    DateTime.parse("${getDuty[i]["duty_date"]}")
-                                        .toLocal();
-                                return Column(
-                                  children: [
-                                    Container(
-                                      height: 120,
-                                      padding: EdgeInsets.all(10),
-                                      color: Colors.red[100],
-                                      child: Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 15.0, right: 15.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Column(
-                                                  children: [
-                                                    AutoSizeText(
-                                                      "DATES",
-                                                      style: TextStyle(
-                                                        fontSize: 15,
-                                                        color: Colors.blueGrey,
-                                                        fontFamily: "Norwester",
-                                                      ),
-                                                    ),
-                                                    AutoSizeText(
-                                                        datename.year
-                                                                .toString() +
-                                                            "-" +
-                                                            datename.month
-                                                                .toString() +
-                                                            "-" +
-                                                            datename.day
-                                                                .toString(),
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                          color:
-                                                              Colors.blueGrey,
-                                                          fontFamily:
-                                                              "Norwester",
-                                                        )),
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    AutoSizeText("SET NO",
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                          color:
-                                                              Colors.blueGrey,
-                                                          fontFamily:
-                                                              "Norwester",
-                                                        )),
-                                                    AutoSizeText(
-                                                        "${getDuty[i]["setno"]}",
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                          color:
-                                                              Colors.blueGrey,
-                                                          fontFamily:
-                                                              "Norwester",
-                                                        )),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    AutoSizeText("TYPE",
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                          color:
-                                                              Colors.blueGrey,
-                                                          fontFamily:
-                                                              "Norwester",
-                                                        )),
-                                                    AutoSizeText(
-                                                        "${getDuty[i]["recordtype"]}",
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                          color:
-                                                              Colors.blueGrey,
-                                                          fontFamily:
-                                                              "Norwester",
-                                                        )),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(height: 10),
-                                          new Container(
-                                              alignment: Alignment.center,
-                                              height: 50,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                color: Colors.grey[100]
-                                                    .withOpacity(0.42),
-                                              ),
-                                              width: double.infinity,
-                                              padding: EdgeInsets.only(
-                                                  left: 10, right: 10),
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                  left: 8.0,
-                                                  right: 8.0,
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    AutoSizeText(
-                                                      getDuty[i]["recordtext"],
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: Colors.blueGrey,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                    Icon(
-                                                      Icons.edit,
-                                                      size: 20,
-                                                    )
-                                                  ],
-                                                ),
-                                              )),
-                                          //SizedBox(height:5),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      color: Colors.white,
-                                      height: 1,
-                                      width: double.infinity,
-                                    )
-                                  ],
-                                );
+                            child: RefreshIndicator(
+                              onRefresh: () async {
+                                setState(() {
+                                  Query(
+                                      options: QueryOptions(document: r"""
+                      query GetAllDutyRecordByUser($_id:ID!){
+                        GetAllDutyRecordByUser(_id:$_id){
+                          _id
+                          user
+                          setno
+                         duty_date
+                         recordtype
+                         recordtext
+                        }
+                      }""", variables: <String, dynamic>{
+                                        "_id": "${widget.uid}"
+                                      }),
+                                      builder: (
+                                        QueryResult result, {
+                                        Refetch refetch,
+                                        FetchMore fetchMore,
+                                      }) {
+                                        if (result.loading) return Center();
+
+                                        getDuty = result
+                                            .data["GetAllDutyRecordByUser"];
+                                      });
+                                });
+                                await _refresh_duty_records();
                               },
+                              child: ListView.builder(
+                                itemCount: getDuty.length,
+                                // children:[dutySection("Editable Records",editable_records,),
+                                // dutySection("Important Records",important_records,),
+                                // dutySection("Unusual Records",unusual_records,),],
+                                itemBuilder: (context, i) {
+                                  var datename = DateTime.parse(
+                                          "${getDuty[i]["duty_date"]}")
+                                      .toLocal();
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        height: 120,
+                                        padding: EdgeInsets.all(10),
+                                        color: Color(0xfff4f5f9),
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 15.0, right: 15.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      AutoSizeText(
+                                                        "DATES",
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                          color:
+                                                              Colors.blueGrey,
+                                                          fontFamily:
+                                                              "Norwester",
+                                                        ),
+                                                      ),
+                                                      AutoSizeText(
+                                                          datename.year
+                                                                  .toString() +
+                                                              "-" +
+                                                              datename.month
+                                                                  .toString() +
+                                                              "-" +
+                                                              datename.day
+                                                                  .toString(),
+                                                          style: TextStyle(
+                                                            fontSize: 15,
+                                                            color:
+                                                                Colors.blueGrey,
+                                                            fontFamily:
+                                                                "Norwester",
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      AutoSizeText("SET NO",
+                                                          style: TextStyle(
+                                                            fontSize: 15,
+                                                            color:
+                                                                Colors.blueGrey,
+                                                            fontFamily:
+                                                                "Norwester",
+                                                          )),
+                                                      AutoSizeText(
+                                                          "${getDuty[i]["setno"]}",
+                                                          style: TextStyle(
+                                                            fontSize: 15,
+                                                            color:
+                                                                Colors.blueGrey,
+                                                            fontFamily:
+                                                                "Norwester",
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      AutoSizeText("TYPE",
+                                                          style: TextStyle(
+                                                            fontSize: 15,
+                                                            color:
+                                                                Colors.blueGrey,
+                                                            fontFamily:
+                                                                "Norwester",
+                                                          )),
+                                                      AutoSizeText(
+                                                          "${getDuty[i]["recordtype"]}",
+                                                          style: TextStyle(
+                                                            fontSize: 15,
+                                                            color:
+                                                                Colors.blueGrey,
+                                                            fontFamily:
+                                                                "Norwester",
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            new Container(
+                                                alignment: Alignment.center,
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  color: Colors.grey
+                                                      .withOpacity(0.2),
+                                                ),
+                                                width: double.infinity,
+                                                padding: EdgeInsets.only(
+                                                    left: 10, right: 10),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: 8.0,
+                                                    right: 8.0,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      AutoSizeText(
+                                                        getDuty[i]
+                                                            ["recordtext"],
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                      Icon(
+                                                        Icons.edit,
+                                                        size: 20,
+                                                      )
+                                                    ],
+                                                  ),
+                                                )),
+                                            //SizedBox(height:5),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        height: 1,
+                                        width: double.infinity,
+                                      )
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ],
@@ -570,4 +635,9 @@ class _DutyRecordsState extends State<DutyRecords> {
               content: Choose(),
             ));
   }
+}
+
+Future<Null> _refresh_duty_records() async {
+  await Future.delayed(Duration(seconds: 1));
+  return null;
 }
