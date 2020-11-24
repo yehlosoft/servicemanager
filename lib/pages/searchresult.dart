@@ -29,7 +29,8 @@ class _Search1State extends State<Search1> {
       GraphQLClient(link: httpLink,cache: OptimisticCache(dataIdFromObject: typenameDataIdFromObject,),),);
     return GraphQLProvider(      
       client: client,
-      child:Query(
+      child:Scaffold(
+        body:Query(
         // ignore: deprecated_member_use
         options:QueryOptions(
           document: r"""
@@ -49,9 +50,9 @@ class _Search1State extends State<Search1> {
            ),
          
         builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) {
-if(result.hasException)return Column(
+if(result.hasException)return Center(child:Column(
                                       mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-                                      children:[Icon(Icons.wifi_off,),Text("no internet")]);
+                                      children:[Icon(Icons.wifi_off,),Text("no internet")]));
           if(result.loading)return Center(child: CircularProgressIndicator());
           
           getSet=result.data["getAllSets"];
@@ -59,7 +60,7 @@ if(result.hasException)return Column(
                         
                     
         }
-      ),);
+      ),));
 }
 }
 

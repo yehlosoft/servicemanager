@@ -55,9 +55,13 @@ class _RoasterFState extends State<RoasterF> {
               }""",
            variables:<String,dynamic>{"_id":"${widget.uid}"}),
           builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) {
-if(result.hasException)return Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-                                      children:[Icon(Icons.wifi_off,),Text("no internet")]);                if(result.loading)return Center(child:CircularProgressIndicator());
+          if(result.hasException)return Center( 
+            child:   Column(crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,
+            
+                                       
+  
+                                        children:[Icon(Icons.wifi_off,),Text("no internet")]),
+);                if(result.loading)return Center(child:CircularProgressIndicator());
                 
 
                 

@@ -46,9 +46,9 @@ class _AAState extends State<AA> {
            ),
          
         builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) { 
-if(result.hasException)return Column(
+if(result.hasException)return Center(child:Column(
                                       mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-                                      children:[Icon(Icons.wifi_off,),Text("no internet")]);
+                                      children:[Icon(Icons.wifi_off,),Text("no internet")]));
           if(result.loading)return ImportantNumbers(aa:[],);
           aa=result.data["getAllDepartments"];
 
