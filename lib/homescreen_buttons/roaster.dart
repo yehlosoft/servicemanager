@@ -108,7 +108,7 @@ class _RoasterState extends State<Roaster> {
 
               Positioned(bottom:15,left:100,right:100,child: footer2(
                 context: context,
-                w:()=> Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder:(_,__,___)=>Search1(),transitionDuration: Duration(seconds: 0))),
+                w:()=> Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder:(_,__,___)=>Search1(uid:widget.uid),transitionDuration: Duration(seconds: 0))),
                
               )),
             ],
@@ -153,9 +153,10 @@ Widget roasterBody(){
                           
                           AddDuty(did:widget.uid,drid:widget.getR[i]["_id"]))),
                            child: Container(
-                             decoration: BoxDecoration(color: Colors.red[100],borderRadius: BorderRadius.only(topRight:Radius.circular(10),bottomRight:Radius.circular(10) )),
+                             height: 20,
+                             decoration: BoxDecoration(color: Colors.red[100],borderRadius: BorderRadius.only(topRight:Radius.circular(50),bottomRight:Radius.circular(50) )),
                              
-                             child: Text(" Add to Duty Records  ",style:TextStyle(backgroundColor: Colors.red[100])))
+                             child: Text(" Add to Duty Records  ",))
                            
                            ),
                         )  ,

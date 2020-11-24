@@ -107,113 +107,156 @@ class _WorkHistoryState extends State<WorkHistory> {
                 padding: const EdgeInsets.all(15),
                 child: head("work history"),
               ),
-              DropdownButton(
-                hint: Text("Choose"),
-                value: _value,
-                items: [
-                  DropdownMenuItem(
-                    child: Text("1st"),
-                    value: 1,
-                    onTap: () {
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    color: Colors.grey[300],
+                  ),
+                  height: screenHeight * 0.04,
+                  width: screenWidth * 0.25,
+                  child: DropdownButton(
+                    underline: Container(
+                      color: Colors.transparent,
+                    ),
+                    hint: Text(
+                      "Choose",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    value: _value,
+                    items: [
+                      DropdownMenuItem(
+                        child: Text(
+                          "1st",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        value: 1,
+                        onTap: () {
+                          setState(() {
+                            items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                          });
+                        },
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          "2nd",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        value: 2,
+                        onTap: () {
+                          setState(() {
+                            items = [6, 7, 8, 9, 10];
+                          });
+                        },
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          "3rd",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        value: 3,
+                        onTap: () {
+                          setState(() {
+                            items = [11, 12, 13, 14, 15];
+                          });
+                        },
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          "4th",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        value: 4,
+                        onTap: () {
+                          setState(() {
+                            items = [16, 26, 36, 45, 45];
+                          });
+                        },
+                      ),
+                    ],
+                    onChanged: (value) {
                       setState(() {
-                        items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                        _value = value;
                       });
                     },
                   ),
-                  DropdownMenuItem(
-                    child: Text("2nd"),
-                    value: 2,
-                    onTap: () {
-                      setState(() {
-                        items = [6, 7, 8, 9, 10];
-                      });
-                    },
-                  ),
-                  DropdownMenuItem(
-                    child: Text("3rd"),
-                    value: 3,
-                    onTap: () {
-                      setState(() {
-                        items = [11, 12, 13, 14, 15];
-                      });
-                    },
-                  ),
-                  DropdownMenuItem(
-                    child: Text("4th"),
-                    value: 4,
-                    onTap: () {
-                      setState(() {
-                        items = [16, 26, 36, 45, 45];
-                      });
-                    },
-                  ),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _value = value;
-                  });
-                },
+                ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: items.length,
-                  itemBuilder: (BuildContext context, int i) {
-                    return Column(
-                      children: [
-                        Container(
-                          color: Colors.red[100],
-                          height: 110,
-                          padding: EdgeInsets.all(10),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15.0),
-                                        child: AutoSizeText("DATES",
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    setState(() {
+                      items = [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        16,
+                        26,
+                        36,
+                        45,
+                        45
+                      ];
+                    });
+                    await _refresh_work_history();
+                  },
+                  child: ListView.builder(
+                    itemCount: items.length,
+                    itemBuilder: (BuildContext context, int i) {
+                      return Column(
+                        children: [
+                          Container(
+                            color: Color(0xfff4f5f9),
+                            height: 110,
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15.0),
+                                          child: AutoSizeText("DATES",
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.blueGrey,
+                                                fontFamily: "Norwester",
+                                              )),
+                                        ),
+                                        AutoSizeText(
+                                            "   " + items[i].toString(),
                                             style: TextStyle(
                                               fontSize: 15,
                                               color: Colors.blueGrey,
                                               fontFamily: "Norwester",
                                             )),
-                                      ),
-                                      AutoSizeText("   " + items[i].toString(),
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.blueGrey,
-                                            fontFamily: "Norwester",
-                                          )),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      AutoSizeText("SET NO",
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.blueGrey,
-                                            fontFamily: "Norwester",
-                                          )),
-                                      AutoSizeText(items[i].toString(),
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.blueGrey,
-                                            fontFamily: "Norwester",
-                                          )),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 15.0),
-                                    child: Column(
+                                      ],
+                                    ),
+                                    Column(
                                       children: [
-                                        AutoSizeText("TYPE",
+                                        AutoSizeText("SET NO",
                                             style: TextStyle(
                                               fontSize: 15,
                                               color: Colors.blueGrey,
@@ -227,36 +270,61 @@ class _WorkHistoryState extends State<WorkHistory> {
                                             )),
                                       ],
                                     ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 15.0),
+                                      child: Column(
+                                        children: [
+                                          AutoSizeText("TYPE",
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.blueGrey,
+                                                fontFamily: "Norwester",
+                                              )),
+                                          AutoSizeText(items[i].toString(),
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.blueGrey,
+                                                fontFamily: "Norwester",
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 5),
+                                new Container(
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.grey.withOpacity(0.20),
                                   ),
-                                ],
-                              ),
-                              SizedBox(height: 5),
-                              new Container(
-                                height: 45,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Color(0xfff4f5f9).withOpacity(0.42),
+                                  width: double.infinity,
+                                  padding: EdgeInsets.all(10.0),
+                                  child: AutoSizeText(
+                                    "    " + items[i].toString(),
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                 ),
-                                width: double.infinity,
-                                padding: EdgeInsets.all(10.0),
-                                child: AutoSizeText(
-                                  "    " + items[i].toString(),
-                                  style: TextStyle(
-                                      fontSize: 18, color: Colors.blueGrey),
-                                ),
-                              ),
-                              //SizedBox(height:5),
-                            ],
+                                //SizedBox(height:5),
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          height: 2,
-                          width: double.infinity,
-                        )
-                      ],
-                    );
-                  },
+                          Container(
+                            color: Colors.white,
+                            height: 2,
+                            width: double.infinity,
+                          )
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: 130)
@@ -264,4 +332,10 @@ class _WorkHistoryState extends State<WorkHistory> {
           )),
     );
   }
+}
+
+// ignore: non_constant_identifier_names
+Future<Null> _refresh_work_history() async {
+  Future.delayed(Duration(seconds: 2));
+  return null;
 }
