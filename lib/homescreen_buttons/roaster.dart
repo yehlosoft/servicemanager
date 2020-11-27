@@ -86,7 +86,7 @@ class Roaster extends StatefulWidget {
 
 class _RoasterState extends State<Roaster> {
 
-  String sidate,searchLabel="SEARCH ROASTER";int option=1;
+  String sidate,searchLabel="ADD DETAILS";int option=1;
   List getSetforRoaster,trainListR;
   String v,vv; String az,stime="",etime="",dhrs="",kms="",nDH="",scode="",ecode="";
   @override
@@ -113,7 +113,7 @@ class _RoasterState extends State<Roaster> {
               )),
             ],
           ),
-    );
+    ); 
 }
 
 Widget roasterBody(){
@@ -365,7 +365,7 @@ Widget roasterSearch(List xz){
         contentPadding: EdgeInsets.only(left:25),focusColor: Color(0xFF9A1518).withOpacity(0.44),
         labelText: searchLabel,
         labelStyle: TextStyle(color: Color(0XFF011627),fontFamily: "Roboto",fontSize: 13,fontWeight: FontWeight.bold),
-        hintText: "Enter Set No To search Your Roaster",hintStyle: TextStyle(color: Color(0XFF011627),fontFamily: "Roboto",fontSize: 11),
+        hintText: "add details to Your Roaster".toUpperCase(),hintStyle: TextStyle(color: Color(0XFF011627),fontFamily: "Roboto",fontSize: 11),
         fillColor: Colors.white.withOpacity(0.44),filled:true,
         focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(50)),
           borderSide: BorderSide(color: const Color(0xFF9A1518),style:BorderStyle.solid )),

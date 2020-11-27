@@ -3,6 +3,7 @@ import 'package:train_service/homescreen_buttons/duty_records.dart';
 import 'package:train_service/homescreen_buttons/imp_numbers.dart';
 import 'package:train_service/homescreen_buttons/news.dart';
 import 'package:train_service/homescreen_buttons/roaster.dart';
+import 'package:train_service/homescreen_buttons/rules.dart';
 import 'package:train_service/homescreen_buttons/work%20history.dart';
 import 'package:train_service/pages/chat_screen.dart';
 import 'package:train_service/pages/profile.dart';
@@ -230,7 +231,7 @@ _videoLibrary() {
   secondRow() {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround,children: [
         CategoryCard(imageUrl:'images/importantnumbers.png',labels: 'important',sublabels: "numbers",h: 55,w: 55,wid: AA(),),
-        CategoryCard(imageUrl:'images/rules.png',labels: 'rules &',sublabels: "updates",h: 60,w: 50,wid: SaveScreen(),),
+        CategoryCard(imageUrl:'images/rules.png',labels: 'rules &',sublabels: "updates",h: 60,w: 50,wid: RulesScreen(),),
         CategoryCard(imageUrl:'images/news.png',labels: 'news',sublabels: '',h: 60,w: 50,wid: News(),),
       ],
     );

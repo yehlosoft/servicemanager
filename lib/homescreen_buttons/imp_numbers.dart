@@ -16,7 +16,7 @@ class AA extends StatefulWidget {
 }
 
 class _AAState extends State<AA> {
-  List aa=List<dynamic>();
+  List aa=List<dynamic>();List sa=List<dynamic>();
   @override
   void initState(){
     super.initState();
@@ -46,13 +46,54 @@ class _AAState extends State<AA> {
            ),
          
         builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) { 
-if(result.hasException)return Center(child:Column(
+                    if(result.hasException)return Column(
                                       mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-                                      children:[Icon(Icons.wifi_off,),Text("no internet")]));
-          if(result.loading)return ImportantNumbers(aa:[],);
+                                      children:[Icon(Icons.wifi_off,),Text("no internet")]);
+
+
+                        if(result.loading)return Center(child: CircularProgressIndicator());
+
           aa=result.data["getAllDepartments"];
 
-            return ImportantNumbers(aa:aa,);
+            return Query(
+        options:QueryOptions(
+          document: r"""
+            query getdept{
+              getAllStations{               
+                station_name
+                _id
+                
+              }
+            }""",),
+          builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) { 
+             if(result.hasException)return Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+                                      children:[Icon(Icons.wifi_off,),Text("no internet")]);
+
+
+                        if(result.loading)return Center(child: CircularProgressIndicator());
+
+          
+          //if(result.loading) return _setSearch([]);
+
+          sa=result.data["getAllStations"];
+          
+          return ImportantNumbers(aa:aa,sa:sa);
+                        
+                    
+        }
+  );
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
                     
          
         }
@@ -63,8 +104,8 @@ if(result.hasException)return Center(child:Column(
 
 
 class ImportantNumbers extends StatefulWidget {
-  final List<dynamic> aa;
-  const ImportantNumbers({Key key, this.aa, }) : super(key: key);
+  final List<dynamic> aa,sa;
+  const ImportantNumbers({Key key, this.aa,this.sa }) : super(key: key);
   @override
   _ImportantNumbersState createState() => _ImportantNumbersState();
 }
@@ -76,12 +117,12 @@ class _ImportantNumbersState extends State<ImportantNumbers> {
   String searchHint="Enter Station Name to Search";
   String searchLabel1="Select Department";
   String searchLabel2="Select Station";
-  List sa;
+ // List sa;
   List cname;
   @override
   void initState(){
     super.initState();
-        sa=initially;
+       // sa=initially;
     cname=initially;
   }
   
@@ -127,7 +168,7 @@ class _ImportantNumbersState extends State<ImportantNumbers> {
 
                 _deptSearch(),
                 
-                setFetch(),
+                _setSearch(widget.sa),
 
                 nameandcontacts(),
 
@@ -174,7 +215,7 @@ Widget _deptSearch() {
 
         onItemSelected: (item) {
           setState(() {
-         // searchLabel1 = item["department"];
+          searchLabel1 = item["department"];
           did=item["_id"];
           print("$did");
           dbool=false;
@@ -182,34 +223,6 @@ Widget _deptSearch() {
         },);
 }
 
-Widget setFetch(){
-  final HttpLink httpLink=HttpLink(uri: "https://servicemanag.herokuapp.com",);
-  final ValueNotifier<GraphQLClient> client = ValueNotifier<GraphQLClient>(
-    GraphQLClient(link: httpLink,cache: OptimisticCache(dataIdFromObject: typenameDataIdFromObject,),),);
-  return GraphQLProvider(
-    client: client,
-    child:Query(
-        options:QueryOptions(
-          document: r"""
-            query getdept{
-              getAllStations{               
-                station_name
-                _id
-                
-              }
-            }""",),
-          builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) { 
-          
-          if(result.loading) return _setSearch([]);
-
-          sa=result.data["getAllStations"];
-          
-          return _setSearch(sa);
-                        
-                    
-        }
-  ),);
-}
 
 Widget _setSearch(List<dynamic> aaa) {
   return  GFSearchBar(
@@ -242,7 +255,7 @@ Widget _setSearch(List<dynamic> aaa) {
 
       onItemSelected: (item) {
         setState(() {
-       // searchLabel2 = item["station_name"];
+        searchLabel2 = item["station_name"];
         sid=item["_id"];
         sbool=false;
         });

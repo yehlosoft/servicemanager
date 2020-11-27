@@ -25,7 +25,7 @@ class _DutyRecordsState extends State<DutyRecords> {
 
   String dateValue = 'Date';
   String setValue = 'Set no';
-  String typeValue = 'Type';
+  String typeValue = ' Type';
   List<String> dateItems = ["Date"];
   List<String> setItems = ["Set no"];
   List<String> typeItems = ["Type"];
@@ -34,6 +34,33 @@ class _DutyRecordsState extends State<DutyRecords> {
     DutyRecordsList demo=DutyRecordsList();
     TextEditingController titleController=TextEditingController();
     TextEditingController contentController=TextEditingController();
+    
+  Widget setupAlertDialoadContainer() {
+    return Container(
+      height: 300.0, // Change as per your requirement
+      width: 300.0, // Change as per your requirement
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: 10,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+            child: ListTile(
+              trailing: GestureDetector(
+                onTap: () {
+                  print("Downloaded $index");
+                },
+                child: Icon(
+                  Icons.download_sharp,
+                ),
+              ),
+              title: Text('Image$index'),
+            ),
+          );
+        },
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     var screenWidth=MediaQuery.of(context).size.width;
@@ -135,125 +162,122 @@ class _DutyRecordsState extends State<DutyRecords> {
 
 
                         return  Column( children: [
-                          Container(
-                      width: screenWidth,
-                      height: screenHeight * 0.065,
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              height: screenHeight * 0.05,
-                              width: screenWidth * 0.28,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                                color: Colors.grey[300],
-                              ),
-                              child: DropdownButton<String>(
-                                value: dateValue,
-                                icon: Icon(Icons.arrow_drop_down),
-                                iconSize: 24,
-                                elevation: 16,
-                                style: TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                underline: Container(
-                                  height: 2,
-                                  color: Colors.transparent,
-                                ),
-                                onChanged: (String newValue) {
-                                  setState(() {
-                                    dateValue = newValue;
-                                    print(dateValue);
-                                  });
-                                },
-                                items: dateItems.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                            Container(
-                              height: screenHeight * 0.05,
-                              alignment: Alignment.center,
-                              width: screenWidth * 0.2,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                                color: Colors.grey[300],
-                              ),
-                              child: DropdownButton<String>(
-                                value: setValue,
-                                icon: Icon(Icons.arrow_drop_down),
-                                iconSize: 24,
-                                elevation: 16,
-                                style: TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                underline: Container(
-                                  height: 2,
-                                  color: Colors.transparent,
-                                ),
-                                onChanged: (String newValue) {
-                                  setState(() {
-                                    setValue = newValue;
-                                    print(setValue);
-                                  });
-                                },
-                                items: setItems.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                            Container(
-                              height: screenHeight * 0.05,
-                              width: screenWidth * 0.35,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25),
-                                color: Colors.grey[300],
-                              ),
-                              child: DropdownButton<String>(
-                                value: typeValue,
-                                icon: Icon(Icons.arrow_drop_down),
-                                iconSize: 20,
-                                elevation: 16,
-                                style: TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                underline: Container(
-                                  height: 2,
-                                  color: Colors.transparent,
-                                ),
-                                onChanged: (String newValue) {
-                                  setState(() {
-                                    typeValue = newValue;
-                                    print(typeValue);
-                                  });
-                                },
-                                items: typeItems.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                  //         Container(
+                  //     width: screenWidth,
+                  //     height: screenHeight * 0.065,
+                  //     color: Colors.white,
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  //       child: Row(
+                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //         children: [
+                  //           Container(
+                  //             height: screenHeight * 0.05,
+                  //             width: screenWidth * 0.28,
+                  //             alignment: Alignment.center,
+                  //             decoration: BoxDecoration(
+                  //               borderRadius: BorderRadius.circular(25),
+                  //               color: Colors.grey[300],
+                  //             ),
+                  //             child: DropdownButton<String>(
+                  //               value: dateValue,
+                  //               icon: Icon(Icons.arrow_drop_down),
+                  //               iconSize: 24,
+                  //               elevation: 16,
+                  //               style: TextStyle(
+                  //                 color: Colors.blueGrey,
+                  //                 fontWeight: FontWeight.bold,
+                  //               ),
+                  //               underline: Container(
+                  //                 height: 2,
+                  //                 color: Colors.transparent,
+                  //               ),
+                  //               onChanged: (String newValue) {
+                  //                 setState(() {
+                  //                   dateValue = newValue;
+                  //                   print(dateValue);
+                  //                 });
+                  //               },
+                  //               items: dateItems.map((String value) {
+                  //                 return DropdownMenuItem<String>(
+                  //                   value: value,
+                  //                   child: Text(value),
+                  //                 );
+                  //               }).toList(),
+                  //             ),
+                  //           ),
+                  //           Container(
+                  //             height: screenHeight * 0.05,
+                  //             alignment: Alignment.center,
+                  //             width: screenWidth * 0.2,
+                  //             decoration: BoxDecoration(
+                  //               borderRadius: BorderRadius.circular(25),
+                  //               color: Colors.grey[300],
+                  //             ),
+                  //             child: DropdownButton<String>(
+                  //               value: setValue,
+                  //               icon: Icon(Icons.arrow_drop_down),
+                  //               iconSize: 24,
+                  //               elevation: 16,
+                  //               style: TextStyle(
+                  //                 color: Colors.blueGrey,
+                  //                 fontWeight: FontWeight.bold,
+                  //               ),
+                  //               underline: Container(
+                  //                 height: 2,
+                  //                 color: Colors.transparent,
+                  //               ),
+                  //               onChanged: (String newValue) {
+                  //                 setState(() {
+                  //                   setValue = newValue;
+                  //                   print(setValue);
+                  //                 });
+                  //               },
+                  //               items: setItems.map((String value) {
+                  //                 return DropdownMenuItem<String>(
+                  //                   value: value,
+                  //                   child: Text(value),
+                  //                 );
+                  //               }).toList(),
+                  //             ),
+                  //           ),
+                  //           Container(
+                  //             height: screenHeight * 0.05,
+                  //             width: screenWidth * 0.35,
+                  //             alignment: Alignment.center,
+                  //             decoration: BoxDecoration(
+                  //               borderRadius: BorderRadius.circular(25),
+                  //               color: Colors.grey[300],
+                  //             ),
+                  //             child: DropdownButton(
+                  //               value: typeValue,
+                  //               icon: Icon(Icons.arrow_drop_down),
+                  //               iconSize: 20,
+                  //               elevation: 16,
+                  //               style: TextStyle(
+                  //                 color: Colors.blueGrey,
+                  //                 fontWeight: FontWeight.bold,
+                  //               ),
+                               
+                  //               onChanged: (String newValue) {
+                  //                 setState(() {
+                  //                   typeValue = newValue;
+                  //                   print(typeValue);
+                  //                 });
+                  //               },
+                  //               items: typeItems.map((String value) {
+                  //                 return DropdownMenuItem<String>(
+                  //                   value: value,
+                  //                   child: Text(value),
+                  //                 );
+                  //               }).toList(),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
                     
-                  ),
+                  // ),
 
                      
                     
@@ -268,7 +292,7 @@ class _DutyRecordsState extends State<DutyRecords> {
                             return Column(
      children: [
       Container(
-                                        height: 120,
+                                        height: 150,
                                         padding: EdgeInsets.all(10),
                                         color: Color(0xfff4f5f9),
                                         child: Column(
@@ -288,7 +312,7 @@ class _DutyRecordsState extends State<DutyRecords> {
                                                         style: TextStyle(
                                                           fontSize: 15,
                                                           color:
-                                                              Colors.blueGrey,
+                                                              Colors.blueGrey[300],
                                                           fontFamily:
                                                               "Norwester",
                                                         ),
@@ -317,7 +341,7 @@ class _DutyRecordsState extends State<DutyRecords> {
                                                           style: TextStyle(
                                                             fontSize: 15,
                                                             color:
-                                                                Colors.blueGrey,
+                                                                Colors.blueGrey[300],
                                                             fontFamily:
                                                                 "Norwester",
                                                           )),
@@ -341,7 +365,7 @@ class _DutyRecordsState extends State<DutyRecords> {
                                                           style: TextStyle(
                                                             fontSize: 15,
                                                             color:
-                                                                Colors.blueGrey,
+                                                                Colors.blueGrey[300],
                                                             fontFamily:
                                                                 "Norwester",
                                                           )),
@@ -362,10 +386,10 @@ class _DutyRecordsState extends State<DutyRecords> {
                                             SizedBox(height: 10),
                                             new Container(
                                                 alignment: Alignment.center,
-                                                height: 50,
+                                                height: 60,
                                                 decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.circular(20),
+                                                      BorderRadius.circular(15),
                                                   color: Colors.grey
                                                       .withOpacity(0.2),
                                                 ),
@@ -381,7 +405,7 @@ class _DutyRecordsState extends State<DutyRecords> {
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .spaceBetween,
+                                                            .spaceBetween, 
                                                     children: [
                                                       AutoSizeText(
                                                         getDuty[i]
@@ -393,10 +417,75 @@ class _DutyRecordsState extends State<DutyRecords> {
                                                               FontWeight.w600,
                                                         ),
                                                       ),
-                                                      Icon(
-                                                        Icons.edit,
-                                                        size: 20,
-                                                      )
+                                                      Column(mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.edit,
+                                                            size: 18,
+                                                            color: Colors.blueGrey,
+                                                         
+                                                      ),SizedBox(height:10),
+                                                       GestureDetector(
+                                                        onTap: () {
+                                                          print("tapped");
+                                                          showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (context) =>
+                                                                    Container(
+                                                              height: 500,
+                                                              width: double
+                                                                  .infinity,
+                                                              child:
+                                                                  AlertDialog(
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .white,
+                                                                contentPadding:
+                                                                    EdgeInsets
+                                                                        .all(5),
+                                                                title: Center(
+                                                                  child: Text(
+                                                                    '    Images    ',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          17,
+                                                                      fontFamily:
+                                                                          "Norwester",
+                                                                      backgroundColor:
+                                                                          Color(
+                                                                              0xFF011627),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                content:
+                                                                    setupAlertDialoadContainer(),
+                                                                actions: [
+                                                                  FlatButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    child: Text(
+                                                                        "Close"),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: Icon(
+                                                          Icons.image,
+                                                          color: Colors.blueGrey,
+                                                        ),
+                                                      ),
+                                                       
+                                                        ],),
+                                                      
                                                     ],
                                                   ),
                                                 )),

@@ -71,19 +71,17 @@ class SearchResult extends StatefulWidget {
   @override
   _SearchResultState createState() => _SearchResultState();
 }
-
 class _SearchResultState extends State<SearchResult> {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin fltrNotification =FlutterLocalNotificationsPlugin();
   void callbackDispatcher() {
-  Workmanager.executeTask((taskName, inputData){
-    var initializationSettingsAndroid =AndroidInitializationSettings('ic_launcher');
-    var initSetttings = InitializationSettings(android:initializationSettingsAndroid,);
-    flutterLocalNotificationsPlugin.initialize(initSetttings,onSelectNotification: onSelectNotification);
-        return Future.value(true);
+    Workmanager.executeTask((taskName, inputData){
+      var initializationSettingsAndroid =AndroidInitializationSettings('ic_launcher');
+      var initSetttings = InitializationSettings(android:initializationSettingsAndroid,);
+      fltrNotification.initialize(initSetttings,onSelectNotification: onSelectNotification);
+      return Future.value(true);
 
     } );
   }
-  
   String searchHint="Enter SET Number to Search";
   String searchLabel="SET NO 232";
   List<dynamic> searchItems,setDetails;
@@ -107,8 +105,8 @@ class _SearchResultState extends State<SearchResult> {
   Future onSelectNotification(String payload) async{
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {return NewScreen(payload: payload,);}));
   }
-  Future<void> scheduleNotification(int year,int month,int day,int hour,int minute,String t,String b) async {    
-    var scheduledNotificationDateTime =new DateTime(year,month,day,hour,minute,0).subtract(Duration(minutes: 10));
+  Future<void> scheduleNotification(int year,int month,int day,int hour,int minute,String t,String b) async {
+    var scheduledNotificationDateTime =new DateTime(year,month,day,hour,minute,0).subtract(Duration(minutes: 30));
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'media channel id',
       'media channel name',
@@ -118,22 +116,22 @@ class _SearchResultState extends State<SearchResult> {
       largeIcon: DrawableResourceAndroidBitmap("ic_launcher"),
       styleInformation: MediaStyleInformation(),
     );
-   
+
     var platformChannelSpecifics = NotificationDetails(android:androidPlatformChannelSpecifics,);
-    await flutterLocalNotificationsPlugin.schedule(
+    await fltrNotification.schedule(
         0,
         t,
         b,
         scheduledNotificationDateTime,
         platformChannelSpecifics,
         payload: "asdfghjbvdfghj"
-        
-        );
-        
+
+    );
+
   }
 
-  
-  Future<void> cancelNotification() async {await flutterLocalNotificationsPlugin.cancel(0);}
+
+  Future<void> cancelNotification() async {await fltrNotification.cancel(0);}
 
   @override
   Widget build(BuildContext context) {
@@ -537,24 +535,24 @@ child: Row(mainAxisAlignment:MainAxisAlignment.start,crossAxisAlignment:CrossAxi
                   }),
 
        FlatButton(color: Color(0xFFF95F62),minWidth: 160,child: Row(mainAxisAlignment: MainAxisAlignment.start,children: [
-               Image.asset('images/notibell.png', height: 20),SizedBox(width: 3),
-               Text('SET REMAINDER', style: const TextStyle(color: Color(0XFFFDFFFC),fontSize: 11)),],),
-               onPressed: () {
-                 showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime.now()).then((value){
-                  int a=value.year;
-                  int b=value.month;
-                  int c=value.day;
-                  showTimePicker(context: context, initialTime: TimeOfDay.now()).then((value) {
-                    int d=value.hour;
-                    int e=value.minute;
-                    scheduleNotification(a, b, c, d, e,"Set No"+az,"Set"+az+"will start after 10 minutes");
-                  });
-                  
+            Image.asset('images/notibell.png', height: 20),SizedBox(width: 3),
+            Text('SET REMINDER', style: const TextStyle(color: Color(0XFFFDFFFC),fontSize: 11)),],),
+            onPressed: () {
+            print(stime);
+              int hr =int.parse(stime.substring(0,2));
+              int min = int.parse(stime.substring(3,5));
+              showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime.now()).then((value){
+                int a=value.year;
+                int b=value.month;
+                int c=value.day;
+                //showTimePicker(context: context, initialTime: TimeOfDay.now()).then((value) {
+                  int d=hr;
+                  int e=min;
+                  scheduleNotification(a, b, c, d, e," Set No "+az," Set "+az+" will start after 30 minutes from now.");
+              });
+            },
 
-                });
-               },
-               
-               ),
+          ),
 
       ],
     ),
