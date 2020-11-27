@@ -16,7 +16,7 @@ class AddDuty extends StatefulWidget {
 
 class _AddDutyState extends State<AddDuty> {
   bool selectSingleImage = false;
-  String rec = "Editable Records";
+  String rec = "Editable Records";String hintlabel=" Choose Records ";
   int option = 1;
   List<File> _images ;
   int length;
@@ -96,7 +96,12 @@ class _AddDutyState extends State<AddDuty> {
                 }""",
             ),
             builder: (RunMutation insert, QueryResult result) {
-              return Column(
+              return SingleChildScrollView(
+                physics: ClampingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                
+                
+                child: Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(15),
@@ -113,7 +118,7 @@ class _AddDutyState extends State<AddDuty> {
                       alignment: Alignment.center,
                       width: screenWidth * 0.4,
                       child: DropdownButton(
-                          hint: Text(" Choose Records "),
+                          hint: Text(hintlabel),
                           underline: Container(
                             height: 2,
                             color: Colors.transparent,
@@ -170,6 +175,7 @@ class _AddDutyState extends State<AddDuty> {
                               onTap: () {
                                 setState(() {
                                   rec = "UNUSUAL";
+                                  
                                 });
                               },
                             ),
@@ -177,6 +183,7 @@ class _AddDutyState extends State<AddDuty> {
                           onChanged: (value) {
                             setState(() {
                               option = value;
+                              hintlabel=rec;
                             });
                           }),
                     ),
@@ -243,7 +250,7 @@ class _AddDutyState extends State<AddDuty> {
                                         alignment: Alignment.center,
                                         height: screenHeight * 0.35,
                                         width: screenWidth * 0.75,
-                                        child: Image.file(_images[i]),
+                                        child: Image.file(_images[i],fit: BoxFit.fill,),
                                       ),
                                     );
                                   },
@@ -304,7 +311,7 @@ class _AddDutyState extends State<AddDuty> {
                   ),
                   // Text("${result.data?.data?.toString()}")
                 ],
-              );
+              ));
             },
           ),
         ),

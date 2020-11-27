@@ -101,6 +101,7 @@ class _RunM1State extends State<RunM1> {
                   print("$mz");
                   print("${cs.year.toString()}-${cs.month.toString()}-${cs.day.toString()}");
                  Navigator.pop(context);
+                  Navigator.pop(context); Navigator.pop(context);
               },
             ),),
   ],),),);}),);

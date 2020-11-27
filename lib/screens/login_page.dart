@@ -6,6 +6,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'dart:convert'show json,base64,ascii;
 
+import 'confirm_mobile.dart';
+
 
 final storage=FlutterSecureStorage();
 
@@ -89,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                       child:GestureDetector(
                         child: Text("forgot Password?",
                         style: TextStyle(color: Color(0XFF011627),fontFamily: "Roboto2",fontSize: 10,fontWeight: FontWeight.bold),),
-                        onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (_) =>GraphApi() ) ),
+                        onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (_) =>ConfirmMobile() ) ),
                         ),),
                     SizedBox(height: 10,),
                     Container(height: 45,
