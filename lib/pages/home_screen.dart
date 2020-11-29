@@ -34,6 +34,8 @@ const mainLink="https://servicemanag.herokuapp.com";
 
 
 class Home extends StatefulWidget {
+
+
   final String jwt,userid;
   final Map<String,dynamic>payload;
 
@@ -52,6 +54,7 @@ class _HomeState extends State<Home> {
 String ln='';
 String eid='';
 String mn='';
+String ms="";
 String uid;
 
   @override
@@ -70,9 +73,9 @@ String uid;
   
               Align(alignment: Alignment.bottomCenter,child: footer1(
                 context:context,
-                w1: ()=> Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder:(_,__,___)=>Profile(fn:fn,ln: fn,eid: eid,mn: eid,),transitionDuration: Duration(seconds: 0))),
+                w1: ()=> Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder:(_,__,___)=>Profile(fn:fn,ln: ln,eid: eid,mn: eid,),transitionDuration: Duration(seconds: 0))),
                 w2: ()=> Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder:(_,__,___)=>Tower(),transitionDuration: Duration(seconds: 0))),
-                w3: ()=> Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder:(_,__,___)=>ChatScreen(),transitionDuration: Duration(seconds: 0))),
+                w3: ()=> Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder:(_,__,___)=>ChatScreen(ms:ms,fn:fn,ln:ln),transitionDuration: Duration(seconds: 0))),
                 w4: ()=> Navigator.pushReplacement(context, PageRouteBuilder(pageBuilder:(_,__,___)=>SaveScreen(),transitionDuration: Duration(seconds: 0))),
                
               )),
@@ -111,6 +114,9 @@ String uid;
                           query getid1($_id:ID!){
                       getUserDetails(_id:$_id){
                         _id
+                        main_station
+                        user_group
+                        user_type
                         first_name
                         last_name
                         mobile_number
@@ -124,6 +130,7 @@ String uid;
                 eid=result.data["getUserDetails"]["email"];
                 mn=result.data["getUserDetails"]["mobile_number"];
                 uid=result.data["getUserDetails"]["_id"];
+                ms=result.data["getUserDetails"]["main_station"];
                 //Profile(fn:fn,ln:ln,eid:eid,mn:mn);
 
            print(uid);

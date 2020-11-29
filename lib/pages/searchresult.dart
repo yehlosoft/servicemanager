@@ -5,6 +5,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:train_service/pages/profile.dart';
 import 'package:train_service/pages/livelocation.dart';
 import 'package:train_service/pages/save.dart';
+import 'package:train_service/screens/database.dart';
 import 'package:train_service/widgets/bottomNavBar.dart';
 import 'package:train_service/widgets/widgets.dart';
 import '../widgets/addtoroaster.dart';
@@ -13,6 +14,8 @@ import 'chat_screen.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 
 class Search1 extends StatefulWidget {
+
+
   final String uid;
 
   const Search1({Key key, this.uid}) : super(key: key);
@@ -21,6 +24,8 @@ class Search1 extends StatefulWidget {
 }
 
 class _Search1State extends State<Search1> {
+
+  DatabaseMethods getStation = new DatabaseMethods();
   List<dynamic>getSet;
   @override
   Widget build(BuildContext context) {

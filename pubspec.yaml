@@ -42,6 +42,9 @@ dependencies:
   workmanager: ^0.2.3
   flutter_secure_storage: ^3.3.1+1
   http: ^0.12.0+4
+  firebase_auth: any
+  cloud_firestore: any
+  firebase_core: any
   
 
 dev_dependencies:
