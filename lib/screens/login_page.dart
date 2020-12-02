@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:train_service/pages/home_screen.dart';
+import 'package:train_service/screens/signup.dart';
 import '../widgets/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -107,13 +108,24 @@ class _LoginPageState extends State<LoginPage> {
 Navigator.push(context,
   PageRouteBuilder(pageBuilder:(_,__,___)=>GraphApi(mobile1:mobile1,password1:password1),transitionDuration: Duration(seconds: 0)));        
                   
-          }
-           
-           
-          
-         
-             ),),
+          }),),
                     ),
+                    Text("Don\'t have account?",
+                        style: TextStyle(color: Color(0XFF011627),fontFamily: "Roboto2",fontSize: 10,fontWeight: FontWeight.bold),),
+                        
+                    Container(height: 45,
+                      child: Padding(padding: const EdgeInsets.only(left:15.0,right: 15,bottom: 10),
+                        child: FlatButton(color: Colors.blue[200],height: 40,
+      child: Center(child: Text("Register".toUpperCase(), style: TextStyle(color: Color(0XFFFDFFFC),fontSize: 14,fontWeight: FontWeight.bold))),
+          onPressed: ()async{
+           
+Navigator.push(context,
+  PageRouteBuilder(pageBuilder:(_,__,___)=>SignUP(),transitionDuration: Duration(seconds: 0)));        
+                  
+          }),),
+                    ),
+
+
           ],),
               ),
         ),    

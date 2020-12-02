@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:train_service/pages/profile.dart';
 import 'package:train_service/pages/searchresult.dart';
 import 'package:train_service/widgets/bottomNavBar.dart';
-import 'package:train_service/pages/save.dart';
+import 'downloads.dart';
 import 'package:train_service/widgets/widgets.dart';
 import 'chat_screen.dart';
 //geolocator: ^5.3.2+2

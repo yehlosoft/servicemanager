@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:train_service/models/duty_records_list.dart';
 import 'package:train_service/pages/chat_screen.dart';
+import 'package:train_service/pages/downloads.dart';
 import 'package:train_service/pages/profile.dart';
 import 'package:train_service/pages/livelocation.dart';
-import 'package:train_service/pages/save.dart';
+
 import 'package:train_service/pages/searchresult.dart';
 import 'package:train_service/widgets/bottomNavBar.dart';
 import 'package:train_service/widgets/widgets.dart';

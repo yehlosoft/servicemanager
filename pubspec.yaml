@@ -43,6 +43,15 @@ dependencies:
   flutter_secure_storage: ^3.3.1+1
   http: ^0.12.0+4
   multi_media_picker: ^0.2.3
+  pdf: ^1.12.0
+  permission_handler: ^5.0.1+1
+  flutter_full_pdf_viewer: ^1.0.6
+  path_provider: ^1.6.24
+  firebase_auth: any
+  cloud_firestore: any
+  firebase_core: any
+  
+  
   
 
 dev_dependencies:

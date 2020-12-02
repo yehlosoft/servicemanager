@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:train_service/calculator/calculation.dart';
 import 'package:train_service/homescreen_buttons/duty_records.dart';
 import 'package:train_service/homescreen_buttons/imp_numbers.dart';
 import 'package:train_service/homescreen_buttons/news.dart';
@@ -8,7 +9,7 @@ import 'package:train_service/homescreen_buttons/work%20history.dart';
 import 'package:train_service/pages/chat_screen.dart';
 import 'package:train_service/pages/profile.dart';
 import 'package:train_service/pages/livelocation.dart';
-import 'package:train_service/pages/save.dart';
+import 'downloads.dart';
 import 'package:train_service/pages/searchresult.dart';
 import 'package:train_service/pages/videoLibrary.dart';
 import 'package:train_service/widgets/bottomNavBar.dart';
@@ -54,6 +55,8 @@ String ln='';
 String eid='';
 String mn='';
 String uid;
+String ms='';
+String ut;
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +74,9 @@ String uid;
   
               Align(alignment: Alignment.bottomCenter,child: footer1(
                 context:context,
-                w1: ()=> Navigator.push(context, PageRouteBuilder(pageBuilder:(_,__,___)=>Profile(fn:fn,ln: fn,eid: eid,mn: eid,),transitionDuration: Duration(seconds: 0))),
+                w1: ()=> Navigator.push(context, PageRouteBuilder(pageBuilder:(_,__,___)=>Profile(fn:fn,ln: ln,eid: eid,mn: mn,),transitionDuration: Duration(seconds: 0))),
                 w2: ()=> Navigator.push(context, PageRouteBuilder(pageBuilder:(_,__,___)=>Tower(),transitionDuration: Duration(seconds: 0))),
-                w3: ()=> Navigator.push(context, PageRouteBuilder(pageBuilder:(_,__,___)=>ChatScreen(),transitionDuration: Duration(seconds: 0))),
+                w3: ()=> Navigator.push(context, PageRouteBuilder(pageBuilder:(_,__,___)=>ChatScreen(ln:ln,fn:fn,ms:ms),transitionDuration: Duration(seconds: 0))),
                 w4: ()=> Navigator.push(context, PageRouteBuilder(pageBuilder:(_,__,___)=>SaveScreen(),transitionDuration: Duration(seconds: 0))),
                
               )),
@@ -116,6 +119,10 @@ String uid;
                         last_name
                         mobile_number
                         email
+                        main_station
+                        user_group
+                        user_type
+                        
                       }}""",variables:<String,dynamic>{"_id":"$user1",} 
                     ),
               builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) {  
@@ -128,6 +135,8 @@ if(result.hasException)return Column(
                 eid=result.data["getUserDetails"]["email"];
                 mn=result.data["getUserDetails"]["mobile_number"];
                 uid=result.data["getUserDetails"]["_id"];
+                ms=result.data["getUserDetails"]["main_station"];
+                ut=result.data["getUserDetails"]["user_type"];
                 //Profile(fn:fn,ln:ln,eid:eid,mn:mn);
 
            print(uid);
@@ -149,7 +158,7 @@ if(result.hasException)return Column(
                   _announcement(),
                   
                   SizedBox(height:10),
-                  fourthRow(),
+                  fourthRow(ut),
                   
                   SizedBox(height:10),
                   GestureDetector(
@@ -272,25 +281,26 @@ _announcement() {
   }
 
 
-  fourthRow() {
+  fourthRow(ut) {
     return Container(height: 165,
       decoration: BoxDecoration(color: Color(0XFF505FE1).withOpacity(0.38),borderRadius: BorderRadius.all(Radius.circular(10))),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
         Column(mainAxisAlignment: MainAxisAlignment.spaceAround,children: [
-          circularBut("pension"),                     
-          circularBut("nda"),                     
-          circularBut("lme"),
+          circularBut("tran all","basic pay","DA: 17%"), 
+
+          circularBut("nda","basic","DA: 17%"),                     
+          circularBut("OT","basic",""),
         ],),
         Column(mainAxisAlignment: MainAxisAlignment.spaceAround,children: [
-          circularBut("grativity"),                     
-          circularBut("hra"),                     
-          circularBut("nha"),
+          circularBut("adl all","basic pay","DA: 17%"),                     
+          circularBut("hra","basic","HRA: 24%"),                     
+          circularBut("nha","basic",""),
         ],),
         Column(mainAxisAlignment: MainAxisAlignment.spaceAround,children: [
-          circularBut("da"),                     
-          circularBut("leaves"),                     
-          circularBut("rra"),
+          circularBut("da","basic","DA: 17%"),                  
+          circularBut("mileage","KM","Rate: 525"),                   
+          circularBut("rra","basic",""),
         ],),
         Column(mainAxisAlignment: MainAxisAlignment.center,children: [
           Image.asset("images/calculator.png",height: 60,width: 60,color: Color(0XFFFFF95F62),),
@@ -306,13 +316,17 @@ _announcement() {
   }
 
 
-  circularBut(String a){
-    return Container(
-      height: 40,width: 75,
-      decoration: BoxDecoration(color:Color(0XFFFDFFFC).withOpacity(0.6),
-        borderRadius: BorderRadius.circular(50),),
-      child:Center(child: Text(a.toUpperCase(),style:const TextStyle(fontSize: 9,fontFamily: "Roboto2",color: Color(0XFF47525E),fontWeight: FontWeight.w800),)
-    ));
+ Widget circularBut(String a,input,fixed){
+    return GestureDetector(
+      onTap: ()=>Navigator.push(context,MaterialPageRoute(builder: (_)=>Calculation(a:a,input:input,fixed:fixed))),
+
+          child: Container(
+        height: 40,width: 75,
+        decoration: BoxDecoration(color:Color(0XFFFDFFFC).withOpacity(0.6),
+          borderRadius: BorderRadius.circular(50),),
+        child:Center(child: Text(a.toUpperCase(),style:const TextStyle(fontSize: 9,fontFamily: "Roboto2",color: Color(0XFF47525E),fontWeight: FontWeight.w800),)
+      )),
+    );
   }
 }
 

@@ -4,7 +4,7 @@ import 'package:getflutter/components/search_bar/gf_search_bar.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:train_service/pages/profile.dart';
 import 'package:train_service/pages/livelocation.dart';
-import 'package:train_service/pages/save.dart';
+import 'downloads.dart';
 import 'package:train_service/widgets/bottomNavBar.dart';
 import 'package:train_service/widgets/widgets.dart';
 import '../widgets/addtoroaster.dart';
@@ -75,7 +75,7 @@ class _SearchResultState extends State<SearchResult> {
   FlutterLocalNotificationsPlugin fltrNotification =FlutterLocalNotificationsPlugin();
   void callbackDispatcher() {
     Workmanager.executeTask((taskName, inputData){
-      var initializationSettingsAndroid =AndroidInitializationSettings('ic_launcher');
+      var initializationSettingsAndroid =AndroidInitializationSettings('@mipmap/ic_launcher');
       var initSetttings = InitializationSettings(android:initializationSettingsAndroid,);
       fltrNotification.initialize(initSetttings,onSelectNotification: onSelectNotification);
       return Future.value(true);
@@ -113,7 +113,7 @@ class _SearchResultState extends State<SearchResult> {
       'media channel description',
       color: Colors.red,
       enableLights: true,
-      largeIcon: DrawableResourceAndroidBitmap("ic_launcher"),
+      largeIcon: DrawableResourceAndroidBitmap("@mipmap/ic_launcher"),
       styleInformation: MediaStyleInformation(),
     );
 

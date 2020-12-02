@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "628737319032",
+    "firebase_url": "https://service-manager-5b1ea.firebaseio.com",
+    "project_id": "service-manager-5b1ea",
+    "storage_bucket": "service-manager-5b1ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628737319032:android:c964257901fcbed9630d8d",
+        "android_client_info": {
+          "package_name": "com.example.train_service"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "628737319032-2vj1q66i9eef7guvtbd2lt15jhiofc6l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4drvaeto2uhloCwjD8HWvNHtfQsX2DIU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "628737319032-2vj1q66i9eef7guvtbd2lt15jhiofc6l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
