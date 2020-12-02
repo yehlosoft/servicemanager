@@ -3,7 +3,6 @@ import 'package:train_service/widgets/widgets.dart';
 
 class Calculation extends StatefulWidget {
   final String a,fixed,input,uta;
-
   const Calculation({Key key, this.a, this.fixed, this.input, this.uta}) : super(key: key);
   @override
   _CalculationState createState() => _CalculationState();
@@ -17,41 +16,28 @@ class _CalculationState extends State<Calculation> {
   Widget build(BuildContext context) {
     var screenWidth=MediaQuery.of(context).size.width;
     var screenHeight=MediaQuery.of(context).size.height;
-    return Scaffold(backgroundColor: Color(0xFF011627),
-        extendBodyBehindAppBar: false,
-        appBar: new AppBar(
-          automaticallyImplyLeading: false,
+    return Scaffold(
+      backgroundColor: Color(0xFF011627),extendBodyBehindAppBar: false,
+        appBar: new AppBar(automaticallyImplyLeading: false,
           title: Row(children: [
-            GestureDetector(
-              child: Icon(Icons.arrow_back),
-              onTap: () => Navigator.pop(context),
-            ),
-            topRow(context)
-          ]),
-          elevation: 0,
-          backgroundColor: Color(0xFF011627),
-        ),
+            GestureDetector(child: Icon(Icons.arrow_back),onTap: () => Navigator.pop(context),),
+            topRow(context)]),
+          elevation: 0,backgroundColor: Color(0xFF011627),),
         body: Container(
           height: screenHeight,
           width: screenWidth,
-          decoration: BoxDecoration(
-              color: Color(0XFFFdFFFC),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
-              )),
-            child: Padding(
-              padding: const EdgeInsets.only(left:10,right:10),
+          decoration: BoxDecoration(color: Color(0XFFFdFFFC),borderRadius: BorderRadius.only(topLeft: Radius.circular(40),topRight: Radius.circular(40),)),
+            child: Padding(padding: const EdgeInsets.only(left:10,right:10),
               child: Expanded(
-                            child: ListView(
+                child: ListView(
                   children: [
-                    Center(
-                      child: Text("${widget.a}".toUpperCase(),
-      style:const TextStyle(color: Color(0XFF47525E),fontWeight: FontWeight.w800,
-      fontSize: 18,fontFamily: "Norwester",decoration: TextDecoration.none,)),
-                    ),
-                    Align(alignment:Alignment.bottomRight,child: Container(width:70,height:30,color: Colors.purple,child: Center(child: Text("${widget.fixed}")))),
+                    Center(child: Text("${widget.a}".toUpperCase(),style:const TextStyle(color: Color(0XFF47525E),fontWeight: FontWeight.w800,
+                      fontSize: 18,fontFamily: "Norwester",decoration: TextDecoration.none,)),),
+
+                    Align(alignment:Alignment.bottomRight,
+                      child: Container(width:70,height:30,color: Colors.purple,child: Center(child: Text("${widget.fixed}")))),
                     Text("${widget.input}".toUpperCase()),
+                    
                     TextField(
                       controller: icont,
                       keyboardType: TextInputType.number,

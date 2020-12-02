@@ -28,10 +28,6 @@ class _WebVBodyState extends State<WebVBody> {
                 onWebViewCreated: (WebViewController webc){
                   _controller.complete(webc);
                 },
-
-              
-          
-        
       ),
     );
   }

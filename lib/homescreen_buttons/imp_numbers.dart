@@ -9,12 +9,6 @@ import 'package:train_service/pages/searchresult.dart';
 import 'package:train_service/widgets/bottomNavBar.dart';
 import 'package:train_service/widgets/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:io' as io;
-import 'dart:math';
-
-import 'package:file/file.dart';
-import 'package:file/local.dart';
-import 'package:path_provider/path_provider.dart';
 
 
 class AA extends StatefulWidget {
@@ -53,61 +47,40 @@ class _AAState extends State<AA> {
            ),
          
         builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) { 
-                    if(result.hasException)return Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-                                      children:[Icon(Icons.wifi_off,),Text("no internet")]);
 
+          if(result.hasException) return Column(mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+            children:[Icon(Icons.wifi_off,),Text("no internet")]);
 
-                        if(result.loading)return Center(child: CircularProgressIndicator());
+          if(result.loading)return Center(child: CircularProgressIndicator());
 
           aa=result.data["getAllDepartments"];
 
-            return Query(
-        options:QueryOptions(
-          document: r"""
-            query getdept{
-              getAllStations{               
-                station_name
-                _id
-                
+          return Query(
+            options:QueryOptions(
+              document: r"""
+                query getdept{
+                  getAllStations{               
+                    station_name
+                    _id
               }
             }""",),
           builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) { 
-             if(result.hasException)return Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-                                      children:[Icon(Icons.wifi_off,),Text("no internet")]);
+            if(result.hasException)return Column(
+              mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+              children:[Icon(Icons.wifi_off,),Text("no internet")]);
 
+            if(result.loading)return Center(child: CircularProgressIndicator());
 
-                        if(result.loading)return Center(child: CircularProgressIndicator());
-
+            sa=result.data["getAllStations"];
           
-          //if(result.loading) return _setSearch([]);
-
-          sa=result.data["getAllStations"];
-          
-          return ImportantNumbers(aa:aa,sa:sa);
+            return ImportantNumbers(aa:aa,sa:sa);
                         
                     
         }
-  );
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-                    
-         
-        }
+  );}
       ),),);
   }
 }
-
 
 
 class ImportantNumbers extends StatefulWidget {
@@ -124,12 +97,10 @@ class _ImportantNumbersState extends State<ImportantNumbers> {
   String searchHint="Enter Station Name to Search";
   String searchLabel1="Select Department";
   String searchLabel2="Select Station";
- // List sa;
   List cname;
   @override
   void initState(){
     super.initState();
-       // sa=initially;
     cname=initially;
   }
   

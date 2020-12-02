@@ -55,22 +55,16 @@ class _RoasterFState extends State<RoasterF> {
               }""",
            variables:<String,dynamic>{"_id":"${widget.uid}"}),
           builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) {
-          if(result.hasException)return Center( 
-            child:   Column(crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,
+            if(result.hasException)return Center( 
+              child:Column(crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment:MainAxisAlignment.center,
+                children:[Icon(Icons.wifi_off,),Text("no internet")]),); 
             
-                                       
-  
-                                        children:[Icon(Icons.wifi_off,),Text("no internet")]),
-);                if(result.loading)return Center(child:CircularProgressIndicator());
-                
+            if(result.loading)return Center(child:CircularProgressIndicator());
 
-                
+            getR=result.data["getUserRoasterslist"];
 
-                getR=result.data["getUserRoasterslist"];
+            return Roaster(getR:getR,uid:widget.uid);
 
-                return Roaster(getR:getR,uid:widget.uid);
-                              
-                          
           }
         ),
   ),);
@@ -197,7 +191,6 @@ Widget roasterBody(){
  
   Widget roasterlist(String label, setname, signon, signoff, userid, roasterid,
       DateTime datename, Color zz) {
-    var abc = signon.split(".");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -355,7 +348,6 @@ Widget setSearch(){
       ),);
 }
 Widget roasterSearch(List xz){
-   var screenWidth=MediaQuery.of(context).size.width;
   return  GFSearchBar(
         searchBoxInputDecoration: InputDecoration(
         enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.solid,color: const Color(0xFF9A1518),),

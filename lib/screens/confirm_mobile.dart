@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:train_service/widgets/widgets.dart';
 import '../pages/searchresult.dart';
 import 'new_password.dart';
@@ -9,6 +10,8 @@ class ConfirmMobile extends StatefulWidget {
 }
 
 class _ConfirmMobileState extends State<ConfirmMobile> {
+  TextEditingController mobileController=TextEditingController();
+  String mnum;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +34,7 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
                     Container(height: 36,
                       child: TextField(
                           keyboardType: TextInputType.phone,
-                          //controller:mobile ,
+                          controller:mobileController ,
                           decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none,color: Color(0XFF011627).withOpacity(0.44)),),
                             disabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none,color: Color(0XFF011627).withOpacity(0.44)),),
@@ -82,7 +85,14 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
                           child: FlatButton(color: Color(0xFFF95F62),height: 40,
                               child: Text('verify otp'.toUpperCase(),style: const TextStyle(color: Color(0XFFFDFFFC),
                                             fontSize: 14,fontFamily: "Roboto",fontWeight: FontWeight.bold)),
-                                       onPressed: ()=>Navigator.pushReplacement(context,MaterialPageRoute(builder: (_)=>RecoverPassword())),
+                                       onPressed: ()=>
+                                         
+                                                  
+Navigator.push(context,
+  PageRouteBuilder(pageBuilder:(_,__,___)=>Aaa(a:mobileController.text),transitionDuration: Duration(seconds: 0)))    
+
+                                         
+                                      
                              ),
                         )),
                   ],
@@ -92,4 +102,61 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
       ),
     );
   }
+  
+    
+   
 }
+
+class Aaa extends StatefulWidget {
+  final String a;
+
+  const Aaa({Key key, this.a}) : super(key: key);
+  @override
+  _AaaState createState() => _AaaState();
+}
+
+class _AaaState extends State<Aaa> {
+  String checknum,pid;
+  @override
+  Widget build(BuildContext context) {
+      final HttpLink httpLink=HttpLink(uri: "https://servicemanag.herokuapp.com",);
+    final ValueNotifier<GraphQLClient> client = ValueNotifier<GraphQLClient>(
+      GraphQLClient(link: httpLink,cache: OptimisticCache(dataIdFromObject: typenameDataIdFromObject,),),);
+    return GraphQLProvider(
+      client: client,
+      child:
+     Scaffold(
+       backgroundColor: Colors.red,
+            body: Query(
+          // ignore: deprecated_member_use
+          options:QueryOptions(
+            document: r"""
+              query getmob($mobile:String!){
+                UserExist(mobile:$mobile){               
+                  _id
+                  mobile
+                }
+              }""",
+            variables:<String,dynamic>{"mobile":"${widget.a}"}
+             ),
+           
+          builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) { 
+
+            if(result.hasException) return Column(mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+              children:[Icon(Icons.wifi_off,),Text("no internet")]);
+
+            if(result.loading)return Center(child: CircularProgressIndicator());
+
+            checknum=result.data["UserExist"]["mobile"];
+            pid=result.data["UserExist"]["_id"];
+            print(pid);
+
+            if(checknum==widget.a) return RecoverPassword(pid:pid);
+            return AlertDialog(title: Text("Error"),content: Text("Wrong Mobile Number"),);
+            
+            }
+        ),
+     ),);
+  }
+  }
+

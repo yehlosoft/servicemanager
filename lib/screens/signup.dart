@@ -66,103 +66,88 @@ class _SignUPState extends State<SignUP> {
                         SizedBox(height: 20,),
                         brownText('Register',20),
                         
-                        Expanded(child: ListView(children:[ 
-                          textField(fnc, "First Name"),
-                        textField(lnc, "Last Name"),
-                         textField(ec, "E-mail"),
-                          textField(passwordController, "Password"),
-                        textField(mobileController, "Mobile"),
-                         textField(ugc, "User Group"),
-                          textField(utyc, "User Type"),
-                          textField(msc, "Main Station"),
-                           GestureDetector(
-                    onTap: () {
-                      print("from");
-                      showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2015),
-                        lastDate: DateTime(2101),
-                      ).then((date) {
-                        setState(() {
-                           finalDate = date.day.toString() +
-                              "-" +
-                              date.month.toString() +
-                              "-" +
-                              date.year.toString();
-
-                          fromDate = finalDate;
-                          from = date;
-                        });
-                      });
-                    },
-                    child: Container(
-                      height: 50,
-                      width: 100,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: Colors.grey[300],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            fromDate == ""
-                                ? Text(
-                                    "Duty Joined On",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  )
-                                : Text(
-                                    "$fromDate",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
+                        Expanded(child: ListView(
+                          children:[ 
+                            textField(fnc, "First Name"),
+                            textField(lnc, "Last Name"),
+                            textField(ec, "E-mail"),
+                            textField(passwordController, "Password"),
+                            textField(mobileController, "Mobile"),
+                            textField(ugc, "User Group"),
+                            textField(utyc, "User Type"),
+                            textField(msc, "Main Station"),
+                            GestureDetector(
+                                onTap: () {
+                                  print("from");
+                                  showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2015),
+                                    lastDate: DateTime(2101),
+                                  ).then((date) {
+                                    setState(() {
+                                      finalDate = date.day.toString() +"-" +date.month.toString() +"-" +date.year.toString();
+                                      fromDate = finalDate;
+                                      from = date;
+                                          });
+                                        });
+                                      },
+                                child: Container(
+                                  height: 50,
+                                  width: 100,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(25),
+                                    color: Colors.grey[300],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        fromDate == ""
+                                            ? Text(
+                                                "Duty Joined On",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              )
+                                            : Text(
+                                                "$fromDate",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                        Icon(
+                                          Icons.calendar_today,
+                                          size: 20,
+                                          color: Colors.grey[800],
+                                        ),
+                                      ],
                                     ),
                                   ),
-                            Icon(
-                              Icons.calendar_today,
-                              size: 20,
-                              color: Colors.grey[800],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-
-
-                       
-                              
-                            
-                    
-                        SizedBox(height: 10,),
-                        GestureDetector(
-        child: Center(child: Text("submit".toUpperCase(), style: TextStyle(color: Color(0XFFFDFFFC),fontSize: 14,fontWeight: FontWeight.bold))),
-            onTap: (){
-                           
-                 insert(<String, dynamic>{
-                  "first_name":fnc.text,
-                 "last_name":lnc.text,
-                  "mobile_number":mobileController.text,
-                 "email":ec.text,
-                  "password":passwordController.text,
-                 "user_group":ugc.text,
-                 "user_type":utyc.text,
-                 "main_station":msc.text,
-                 "duty_joined_on": fromDate,
-                      });
-
-                     print(fromDate);
-                     print(mobileController.text);
-                      print("${result.data?.data?.toString()}");
-                      Navigator.pop(context);
-                      
-                  
-            }),
+                                ),
+                              ),
+                                                          
+                            SizedBox(height: 10,),
+                            GestureDetector(
+                              child: Center(child: Text("submit".toUpperCase(), 
+                                style: TextStyle(color: Color(0XFFFDFFFC),fontSize: 14,fontWeight: FontWeight.bold))),
+                              onTap: (){
+                                  insert(<String, dynamic>{
+                                    "first_name":fnc.text,
+                                    "last_name":lnc.text,
+                                    "mobile_number":mobileController.text,
+                                    "email":ec.text,
+                                    "password":passwordController.text,
+                                    "user_group":ugc.text,
+                                    "user_type":utyc.text,
+                                    "main_station":msc.text,
+                                    "duty_joined_on": fromDate,
+                                          });
+                                  Navigator.pop(context);
+                                }),
                          
                         ])),
                        

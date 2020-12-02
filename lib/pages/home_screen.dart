@@ -23,17 +23,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 final storage=FlutterSecureStorage();
 const mainLink="https://servicemanag.herokuapp.com";
           final HttpLink httpLink=HttpLink(uri: mainLink);
- // 5f9969e3b41e5005688845da
-       
-
-
-
-
-
-
-
-  
-
 
 class Home extends StatefulWidget {
   final String jwt,userid;
@@ -103,11 +92,7 @@ String ut;
         final AuthLink authLink=AuthLink(getToken: ()async=>"Bearer ${widget.jwt}");
         final Link link1=authLink.concat(httpLink);   
         final ValueNotifier<GraphQLClient> client = ValueNotifier<GraphQLClient>(GraphQLClient(link: link1,
-          cache: OptimisticCache(dataIdFromObject: typenameDataIdFromObject,),));     
-          
-           
-
-       
+          cache: OptimisticCache(dataIdFromObject: typenameDataIdFromObject,),));  
          String user1= widget.payload['userID'];
           return GraphQLProvider(
             client: client,
@@ -126,10 +111,12 @@ String ut;
                       }}""",variables:<String,dynamic>{"_id":"$user1",} 
                     ),
               builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) {  
-if(result.hasException)return Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-                                      children:[Icon(Icons.wifi_off,),Text("no internet")]);
+                if(result.hasException)return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+                  children:[Icon(Icons.wifi_off,),Text("no internet")]);
+
                 if(result.loading)return Center(child: CircularProgressIndicator(),);
+
                 fn=result.data["getUserDetails"]["first_name"];
                 ln=result.data["getUserDetails"]["last_name"];
                 eid=result.data["getUserDetails"]["email"];
@@ -139,14 +126,14 @@ if(result.hasException)return Column(
                 ut=result.data["getUserDetails"]["user_type"];
                 //Profile(fn:fn,ln:ln,eid:eid,mn:mn);
 
-           print(uid);
-          return Container(height: screenHeight,width: screenWidth,decoration: BoxDecoration(color: Color(0xFFFFFFFF),
+                print(uid);
+                return Container(height: screenHeight,width: screenWidth,decoration: BoxDecoration(color: Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(40),topRight: Radius.circular(40),)),
                       child: Padding(padding: const EdgeInsets.only(left:10.0,right: 10),
                         child: ListView(children: <Widget>[
                   Padding(padding:const EdgeInsets.only(left:20,right:20),
 
-                  child:_welcomeText("${fn}"+"${ln}"),),
+                  child:_welcomeText("$fn"+"$ln"),),
                  
                   SizedBox(height:10),
                   firstRow(),
@@ -174,20 +161,6 @@ if(result.hasException)return Column(
         }
       
     );
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
   }
 
 _videoLibrary() {

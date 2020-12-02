@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:train_service/models/duty_records_list.dart';
 import 'package:train_service/pages/chat_screen.dart';
 import 'package:train_service/pages/downloads.dart';
 import 'package:train_service/pages/profile.dart';
 import 'package:train_service/pages/livelocation.dart';
-
 import 'package:train_service/pages/searchresult.dart';
 import 'package:train_service/widgets/bottomNavBar.dart';
 import 'package:train_service/widgets/widgets.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'duty_dialog.dart';
 
 class DutyRecords extends StatefulWidget {
   final String uid;
@@ -32,7 +29,7 @@ class _DutyRecordsState extends State<DutyRecords> {
   List<String> typeItems = ["Type"];
   List<String> filteredItems = [];
     int a=1;List getDuty;
-    DutyRecordsList demo=DutyRecordsList();
+    
     TextEditingController titleController=TextEditingController();
     TextEditingController contentController=TextEditingController();
     
@@ -104,14 +101,7 @@ class _DutyRecordsState extends State<DutyRecords> {
     return GraphQLProvider(      
       client: client,
       child:Scaffold(
-        // floatingActionButton:  Padding(
-        //                 padding: const EdgeInsets.only(right: 20,bottom: 150),
-        //                 child: Align(alignment: Alignment.bottomRight,
-        //                   child: FloatingActionButton(backgroundColor: Colors.white,
-        //                     onPressed: onadd,
-        //                   child:Icon(Icons.add_box,size: 40,color: Color(0xFF9A1518),),)),
-        //               ),
-         backgroundColor: Color(0xFF011627),
+       backgroundColor: Color(0xFF011627),
         body: Container(
           height: screenHeight,width: screenWidth,
           decoration: BoxDecoration(color: Color(0XFFFdFFFC),
@@ -120,7 +110,7 @@ class _DutyRecordsState extends State<DutyRecords> {
             children: [
                Padding(padding: const EdgeInsets.all(15),child: head("duty records"),),
               Expanded(
-                              child: Query(options:QueryOptions(
+                child: Query(options:QueryOptions(
                     document: r"""
                       query GetAllDutyRecordByUser($_id:ID!){
                         GetAllDutyRecordByUser(_id:$_id){
@@ -134,25 +124,17 @@ class _DutyRecordsState extends State<DutyRecords> {
                       }""",
                    variables:<String,dynamic>{"_id":"${widget.uid}"}),
                   builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) {
-                                    if(result.hasException)return Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-                                      children:[Icon(Icons.wifi_off,),Text("no internet")]);
+                    if(result.hasException)return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+                      children:[Icon(Icons.wifi_off,),Text("no internet")]);
 
+                    if(result.loading)return Center(child: CircularProgressIndicator());
 
-                        if(result.loading)return Center(child: CircularProgressIndicator());
-
-                        
-
-                        getDuty=result.data["GetAllDutyRecordByUser"];
-                         for (int i = 0; i < getDuty.length; i++) {
-                      var datename =
-                          DateTime.parse("${getDuty[i]["duty_date"]}")
-                              .toLocal();
-                      String date = datename.year.toString() +
-                          "-" +
-                          datename.month.toString() +
-                          "-" +
-                          datename.day.toString();
+                    getDuty=result.data["GetAllDutyRecordByUser"];
+                    
+                    for (int i = 0; i < getDuty.length; i++) {
+                      var datename =DateTime.parse("${getDuty[i]["duty_date"]}").toLocal();
+                      String date = datename.year.toString() +"-" +datename.month.toString() +"-" +datename.day.toString();
                       dateItems.add(date);
                       dateItems = dateItems.toSet().toList();
                       setItems.add("${getDuty[i]["setno"]}");
@@ -161,9 +143,188 @@ class _DutyRecordsState extends State<DutyRecords> {
                       typeItems = typeItems.toSet().toList();
                     }
 
+                    return  Column( children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: getDuty.length,
+                          itemBuilder: (context,i){
+                            var datename=DateTime.parse("${getDuty[i]["duty_date"]}").toLocal();
+                            return Column(
+                              children: [
+                                Container(
+                                        height: 150,
+                                        padding: EdgeInsets.all(10),
+                                        color: Color(0xfff4f5f9),
+                                        child: Column(
+                                          children: [
+                                            Padding(padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                                              child: Row(mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      AutoSizeText("DATES",style: TextStyle(fontSize: 15,color:Colors.blueGrey[300],fontFamily:"Norwester",),),
+                                                      AutoSizeText(datename.year.toString() +"-" +datename.month.toString() +"-" +datename.day.toString(),
+                                                          style: TextStyle(fontSize: 15,color:Colors.blueGrey,fontFamily:"Norwester",)),],),
 
-                        return  Column( children: [
-                  //         Container(
+                                                  Column(
+                                                    children: [
+                                                      AutoSizeText("SET NO",
+                                                          style: TextStyle(fontSize: 15,color:Colors.blueGrey[300],fontFamily:"Norwester",)),
+                                                      AutoSizeText("${getDuty[i]["setno"]}",
+                                                          style: TextStyle(fontSize: 15,color:Colors.blueGrey,fontFamily:"Norwester",)),],),
+
+                                                  SizedBox(height: 5,),
+                                                  
+                                                  Column(
+                                                    children: [
+                                                      AutoSizeText("TYPE",
+                                                          style: TextStyle(fontSize: 15,color:Colors.blueGrey[300],fontFamily:"Norwester",)),
+                                                      AutoSizeText(
+                                                          "${getDuty[i]["recordtype"]}",
+                                                          style: TextStyle(fontSize: 15,color:Colors.blueGrey,fontFamily:"Norwester",)),],),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+
+                                            new Container(
+                                                alignment: Alignment.center,
+                                                height: 60,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  color: Colors.grey
+                                                      .withOpacity(0.2),
+                                                ),
+                                                width: double.infinity,
+                                                padding: EdgeInsets.only(
+                                                    left: 10, right: 10),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: 8.0,
+                                                    right: 8.0,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween, 
+                                                    children: [
+                                                      AutoSizeText(
+                                                        getDuty[i]
+                                                            ["recordtext"],
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                      Column(mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.edit,
+                                                            size: 18,
+                                                            color: Colors.blueGrey,
+                                                         
+                                                      ),SizedBox(height:10),
+                                                       GestureDetector(
+                                                        onTap: () {
+                                                          print("tapped");
+                                                          showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (context) =>
+                                                                    Container(
+                                                              height: 500,
+                                                              width: double
+                                                                  .infinity,
+                                                              child:
+                                                                  AlertDialog(
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .white,
+                                                                contentPadding:
+                                                                    EdgeInsets
+                                                                        .all(5),
+                                                                title: Center(
+                                                                  child: Text(
+                                                                    '    Images    ',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          17,
+                                                                      fontFamily:
+                                                                          "Norwester",
+                                                                      backgroundColor:
+                                                                          Color(
+                                                                              0xFF011627),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                content:
+                                                                    setupAlertDialoadContainer(),
+                                                                actions: [
+                                                                  FlatButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    child: Text(
+                                                                        "Close"),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: Icon(
+                                                          Icons.image,
+                                                          color: Colors.blueGrey,
+                                                        ),
+                                                      ),
+                                                       
+                                                        ],),
+                                                      
+                                                    ],
+                                                  ),
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        height: 1,
+                                        width: double.infinity,
+                                      )
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          
+                        ],
+                      );
+                    }),
+              ),
+              SizedBox(height: 140)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  
+
+
+
+}
+
+// filter button below
+//         Container(
                   //     width: screenWidth,
                   //     height: screenHeight * 0.065,
                   //     color: Colors.white,
@@ -279,285 +440,3 @@ class _DutyRecordsState extends State<DutyRecords> {
                   //     ),
                     
                   // ),
-
-                     
-                    
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: getDuty.length,
-                          // children:[dutySection("Editable Records",editable_records,),
-                          // dutySection("Important Records",important_records,),
-                          // dutySection("Unusual Records",unusual_records,),],
-                          itemBuilder: (context,i){
-                            var datename=DateTime.parse("${getDuty[i]["duty_date"]}").toLocal();
-                            return Column(
-     children: [
-      Container(
-                                        height: 150,
-                                        padding: EdgeInsets.all(10),
-                                        color: Color(0xfff4f5f9),
-                                        child: Column(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 15.0, right: 15.0),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Column(
-                                                    children: [
-                                                      AutoSizeText(
-                                                        "DATES",
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                          color:
-                                                              Colors.blueGrey[300],
-                                                          fontFamily:
-                                                              "Norwester",
-                                                        ),
-                                                      ),
-                                                      AutoSizeText(
-                                                          datename.year
-                                                                  .toString() +
-                                                              "-" +
-                                                              datename.month
-                                                                  .toString() +
-                                                              "-" +
-                                                              datename.day
-                                                                  .toString(),
-                                                          style: TextStyle(
-                                                            fontSize: 15,
-                                                            color:
-                                                                Colors.blueGrey,
-                                                            fontFamily:
-                                                                "Norwester",
-                                                          )),
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      AutoSizeText("SET NO",
-                                                          style: TextStyle(
-                                                            fontSize: 15,
-                                                            color:
-                                                                Colors.blueGrey[300],
-                                                            fontFamily:
-                                                                "Norwester",
-                                                          )),
-                                                      AutoSizeText(
-                                                          "${getDuty[i]["setno"]}",
-                                                          style: TextStyle(
-                                                            fontSize: 15,
-                                                            color:
-                                                                Colors.blueGrey,
-                                                            fontFamily:
-                                                                "Norwester",
-                                                          )),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      AutoSizeText("TYPE",
-                                                          style: TextStyle(
-                                                            fontSize: 15,
-                                                            color:
-                                                                Colors.blueGrey[300],
-                                                            fontFamily:
-                                                                "Norwester",
-                                                          )),
-                                                      AutoSizeText(
-                                                          "${getDuty[i]["recordtype"]}",
-                                                          style: TextStyle(
-                                                            fontSize: 15,
-                                                            color:
-                                                                Colors.blueGrey,
-                                                            fontFamily:
-                                                                "Norwester",
-                                                          )),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(height: 10),
-                                            new Container(
-                                                alignment: Alignment.center,
-                                                height: 60,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                  color: Colors.grey
-                                                      .withOpacity(0.2),
-                                                ),
-                                                width: double.infinity,
-                                                padding: EdgeInsets.only(
-                                                    left: 10, right: 10),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    left: 8.0,
-                                                    right: 8.0,
-                                                  ),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween, 
-                                                    children: [
-                                                      AutoSizeText(
-                                                        getDuty[i]
-                                                            ["recordtext"],
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                                      ),
-                                                      Column(mainAxisAlignment: MainAxisAlignment.center,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.edit,
-                                                            size: 18,
-                                                            color: Colors.blueGrey,
-                                                         
-                                                      ),SizedBox(height:10),
-                                                       GestureDetector(
-                                                        onTap: () {
-                                                          print("tapped");
-                                                          showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (context) =>
-                                                                    Container(
-                                                              height: 500,
-                                                              width: double
-                                                                  .infinity,
-                                                              child:
-                                                                  AlertDialog(
-                                                                backgroundColor:
-                                                                    Colors
-                                                                        .white,
-                                                                contentPadding:
-                                                                    EdgeInsets
-                                                                        .all(5),
-                                                                title: Center(
-                                                                  child: Text(
-                                                                    '    Images    ',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          17,
-                                                                      fontFamily:
-                                                                          "Norwester",
-                                                                      backgroundColor:
-                                                                          Color(
-                                                                              0xFF011627),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                content:
-                                                                    setupAlertDialoadContainer(),
-                                                                actions: [
-                                                                  FlatButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                    },
-                                                                    child: Text(
-                                                                        "Close"),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          );
-                                                        },
-                                                        child: Icon(
-                                                          Icons.image,
-                                                          color: Colors.blueGrey,
-                                                        ),
-                                                      ),
-                                                       
-                                                        ],),
-                                                      
-                                                    ],
-                                                  ),
-                                                )),
-                                            //SizedBox(height:5),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        color: Colors.white,
-                                        height: 1,
-                                        width: double.infinity,
-                                      )
-                                    ],
-                                  );
-                                },
-                              ),
-                            ),
-                          
-                        ],
-                      );
-                    }),
-              ),
-              SizedBox(height: 140)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-   Widget dutySection(String a,List<DutyRecordsList> _list,){
-     int len=_list.length;
-    return ExpansionTile(childrenPadding: EdgeInsets.only(left:10,right: 10),
-        title: Text(a,style: TextStyle(color: Color(0XFF002C5B),fontFamily: "Roboto2",fontSize: 16,fontWeight: FontWeight.w800,)), 
-        subtitle: Text(' ($len)',style: TextStyle(fontSize: 12,fontFamily: "Roboto2",color: Colors.red,fontWeight: FontWeight.w800)),
-   children:  _list.map((e) => Column(
-     children: [
-       Container(
-         padding: EdgeInsets.all(10),
-         color:Colors.red[100],
-         child: Column(children: [
-           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-             children: [
-                Align(alignment: Alignment.topLeft,
-                  child: AutoSizeText(e.title,style:TextStyle(fontSize: 15,color: Colors.blueGrey,fontFamily: "Norwester", ))),
-              Align(alignment: Alignment.topRight,
-                  child: AutoSizeText("SET NO : ${e.setno}",style:TextStyle(fontSize: 15,color: Colors.blueGrey,fontFamily: "Norwester", ))),
-                  SizedBox(height: 5,), ],),
-              new Container(width: double.infinity,color:Colors.grey[100].withOpacity(0.42),padding: EdgeInsets.only(left:10,right:10),
-                child:AutoSizeText(e.content,style:TextStyle(fontSize: 11,color: Colors.blueGrey))
-                ),
-                //SizedBox(height:5),
-                 
-               
-              ],),
-       ),
-       Container(color: Colors.white,height: 1,width: double.infinity,)
-     ],
-   )).toList());
-  }
-onadd() {  
-   showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        contentPadding: EdgeInsets.all(5),
-        title:Center(child: Text('    Add Duty records    '.toUpperCase(),
-          style: const TextStyle(color: Colors.white,fontSize: 17,fontFamily: "Norwester",backgroundColor: Color(0xFF011627),),)),
-        content: Choose(),
-      )
-    );
-}
-
-
-}

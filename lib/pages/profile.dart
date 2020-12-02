@@ -5,10 +5,7 @@ import 'package:train_service/pages/searchresult.dart';
 import 'package:train_service/widgets/bottomNavBar.dart';
 import 'package:train_service/widgets/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'chat_screen.dart';
-
-
 
 
 class Profile extends StatefulWidget {

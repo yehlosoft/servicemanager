@@ -36,6 +36,6 @@ class DatabaseMethods {
   }
   getConversationMessages(String chatRoomId) async {
     print(chatRoomId);
-    return await FirebaseFirestore.instance.collection("ChatRoom").doc(chatRoomId).collection("chats").orderBy("time", descending: false).snapshots();
+    return  FirebaseFirestore.instance.collection("ChatRoom").doc(chatRoomId).collection("chats").orderBy("time", descending: false).snapshots();
   }
 }

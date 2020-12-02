@@ -50,12 +50,14 @@ class _Search1State extends State<Search1> {
            ),
          
         builder:(  QueryResult result, {Refetch refetch,FetchMore fetchMore,}) {
-if(result.hasException)return Center(child:Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
-                                      children:[Icon(Icons.wifi_off,),Text("no internet")]));
-          if(result.loading)return Center(child: CircularProgressIndicator());
+            if(result.hasException)return Center(child:Column(
+              mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment: CrossAxisAlignment.center,
+              children:[Icon(Icons.wifi_off,),Text("no internet")]));
+
+            if(result.loading)return Center(child: CircularProgressIndicator());
           
-          getSet=result.data["getAllSets"];
+            getSet=result.data["getAllSets"];
+
             return SearchResult(getSet:getSet,uid:widget.uid);
                         
                     
@@ -223,8 +225,6 @@ Widget fetchTrain(){
           if(result.loading)return Text("");
           getTrain=result.data["getAllTrains"];
           return searchbar2(getTrain);
-            
-         
         }
       ),);
 }
@@ -262,7 +262,6 @@ Widget fetchTrain(){
       
       onItemSelected: (item) {
         setState(() {
-        // searchLabel = item["setno"];      
           az=item["setno"];
           azbool=false;
           dhrs=item["duty_hrs"];
