@@ -45,7 +45,7 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
                         disabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none,color: Color(0XFF011627).withOpacity(0.44)),),
                         contentPadding:const EdgeInsets.only(left:15),focusColor: Color(0XFF011627).withOpacity(0.44),
                         labelText: "  Enter Mobile Number",labelStyle: const TextStyle(color: Color(0XFFFDFFFC),fontFamily: "Roboto",fontSize: 12),
-                        hintText: "+91981452488",hintStyle: const TextStyle(color: Color(0XFF011627),fontFamily: "Roboto",fontSize: 14),
+                        hintText: "981452488",hintStyle: const TextStyle(color: Color(0XFF011627),fontFamily: "Roboto",fontSize: 14),
                         fillColor: Color(0XFF011627).withOpacity(0.44),filled: true,
                         focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: const Color(0XFF011627).withOpacity(0.44),style:BorderStyle.none )),
                         prefixIcon: Container(color: Color(0XFF011627),height: 52,width: 45,
@@ -95,8 +95,9 @@ class _ConfirmMobileState extends State<ConfirmMobile> {
                                     fontWeight: FontWeight.bold))),
                             onPressed: () {
                               print("Send OTP Triggered");
-                              print(mobileController.text);
-                              verifyPhone(mobileController.text);
+                              var pho = "+91"+mobileController.text;
+                              print(pho);
+                              verifyPhone(pho);
                             }
                         )
                     ),
@@ -225,3 +226,4 @@ class _AaaState extends State<Aaa> {
       ),);
   }
 }
+

@@ -2,9 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../widgets/widgets.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-
-
-
+import 'package:form_validator/form_validator.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 
 class SignUP extends StatefulWidget {
@@ -15,9 +14,26 @@ class SignUP extends StatefulWidget {
 
 class _SignUPState extends State<SignUP> {
   String verificationId;
+  final validator1 = ValidationBuilder().email().maxLength(50).build();
+  final validator2 = ValidationBuilder().phone().maxLength(10).build();
+  final validate = ValidationBuilder().minLength(1).maxLength(50).build();
+  final passvali = ValidationBuilder().minLength(8).maxLength(50).build();
+  // final emailValid = EmailValidator(errorText: 'Please Enter A Valid Email Address');
+  // final passwordValidator = MultiValidator([
+  //   RequiredValidator(errorText: "This Field Is Required."),
+  //   MinLengthValidator(8, errorText: 'Password Must Be 8 Digits Long'),
+  //   PatternValidator(r'(?=.*?[#?!@$%^&*-])', errorText: 'Password Should Have Atleast 1 Special Character.')
+  // ]);
+  // final phoneValidator = MultiValidator([
+  // RequiredValidator(errorText: 'This Field Is Required.'),
+  //     MinLengthValidator(10, errorText: 'Enter A Valid Phone Number'),
+  // MaxLengthValidator(10, errorText: "Enter A Valid Phone Number"),
+  // PatternValidator(r'(^(?:[+0]9)?[0-9]{10,12}$)', errorText: 'Enter A Valid Phone Number'),
+  // ]);
+  //var reqValid = RequiredValidator(errorText: 'This Field Is Required.');
   int veri=0;
   TextEditingController _otp = new TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   TextEditingController mobileController=TextEditingController(),fnc=TextEditingController(),lnc=TextEditingController(),
   ec=TextEditingController(),ugc=TextEditingController(),utyc=TextEditingController(),msc=TextEditingController();
   TextEditingController passwordController=TextEditingController();
@@ -72,176 +88,190 @@ class _SignUPState extends State<SignUP> {
                         SizedBox(height: 20,),
                         brownText('Register',20),
                         
-                        Expanded(child: ListView(
-                          children:[ 
-                            textField(fnc, "First Name"),
-                            textField(lnc, "Last Name"),
-                            textField(ec, "E-mail"),
-                            textField(passwordController, "Password"),
-                            textField(mobileController, "Mobile"),
-                            textField(ugc, "User Group"),
-                            textField(utyc, "User Type"),
-                            textField(msc, "Main Station"),
-                            SizedBox(
-                              height:15.0,
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  print("from");
-                                  showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(2015),
-                                    lastDate: DateTime(2101),
-                                  ).then((date) {
-                                    setState(() {
-                                      finalDate = date.day.toString() +"-" +date.month.toString() +"-" +date.year.toString();
-                                      fromDate = finalDate;
-                                      from = date;
+                        Expanded(child: Form(
+                          key:_formKey,
+                          child: ListView(
+                            children:[ 
+                              textField(fnc, "First Name","2"),
+                              textField(lnc, "Last Name","2"),
+                              textField(ec, "E-mail","1"),
+                              textField(passwordController, "Password","3"),
+                              textField(mobileController, "Mobile","4"),
+                              textField(ugc, "User Group","0"),
+                              textField(utyc, "User Type","0"),
+                              textField(msc, "Main Station","0"),
+                              SizedBox(
+                                height:15.0,
+                              ),
+                              GestureDetector(
+                                  onTap: () {
+                                    print("from");
+                                    showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2015),
+                                      lastDate: DateTime(2101),
+                                    ).then((date) {
+                                      setState(() {
+                                        finalDate = date.day.toString() +"-" +date.month.toString() +"-" +date.year.toString();
+                                        fromDate = finalDate;
+                                        from = date;
+                                            });
                                           });
-                                        });
-                                      },
-                                child: Container(
+                                        },
+                                  child: Container(
+                                    height: 50,
+                                    width: 100,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(25),
+                                      color: Colors.grey[300],
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          fromDate == ""
+                                              ? Text(
+                                                  "Duty Joined On",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                )
+                                              : Text(
+                                                  "$fromDate",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                          Icon(
+                                            Icons.calendar_today,
+                                            size: 20,
+                                            color: Colors.grey[800],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              SizedBox(height: 15),
+                              GestureDetector(
+                                onTap: () {
+                                  if(_formKey.currentState.validate())
+                                    {
+                                      setState(() {
+                                        veri=1;
+                                        print("All The Fields are filled.....");
+                                      });
+                                    }
+                                  colr = Color(0xFF8FB339);
+                                  var _pho="+91"+mobileController.text;
+                                  print(_pho);
+                                  if(veri==1) {
+                                    verifyPhone(_pho);
+                                  }
+                                },
+                                child:Container(
                                   height: 50,
                                   width: 100,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
-                                    color: Colors.grey[300],
+                                    color: Color(0xFF8FB339),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        fromDate == ""
-                                            ? Text(
-                                                "Duty Joined On",
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                ),
-                                              )
-                                            : Text(
-                                                "$fromDate",
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                        Icon(
-                                          Icons.calendar_today,
-                                          size: 20,
-                                          color: Colors.grey[800],
-                                        ),
-                                      ],
+                                  child:Center(
+                                    child:Text("Verify Phone Number",
+                                    style:TextStyle(
+                                      color:Color(0XFFFDFFFC),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      wordSpacing: 1.1,
+                                      letterSpacing: 1.1,
+                                    )
                                     ),
                                   ),
                                 ),
                               ),
-                            SizedBox(height: 15),
-                            GestureDetector(
-                              onTap: () {
-                                colr = Color(0xFF8FB339);
-                                verifyPhone(mobileController.text);
-                              },
-                              child:Container(
-                                height: 50,
-                                width: 100,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  color: Color(0xFF8FB339),
-                                ),
-                                child:Center(
-                                  child:Text("Verify Phone Number",
-                                  style:TextStyle(
-                                    color:Color(0XFFFDFFFC),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    wordSpacing: 1.1,
-                                    letterSpacing: 1.1,
-                                  )
-                                  ),
-                                ),
+                              SizedBox(
+                                height: 15.0,
                               ),
-                            ),
-                            SizedBox(
-                              height: 15.0,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                SizedBox(
-                                  width: 0.04*MediaQuery.of(context).size.width,
-                                ),
-                                Container(
-                                  height: 36,
-                                  width: 0.35*MediaQuery.of(context).size.width,
-                                  alignment: Alignment.center,
-                                  child:TextField(
-                                    keyboardType: TextInputType.number,
-                                    controller:_otp ,
-                                    decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none,color: Color(0XFF011627).withOpacity(0.44)),),
-                                      disabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none,color: Color(0XFF011627).withOpacity(0.44)),),
-                                      contentPadding: const EdgeInsets.only(left:15),focusColor: Color(0XFF011627).withOpacity(0.44),
-                                      labelText: "  Enter OTP",labelStyle: const TextStyle(color: Color(0XFFFDFFFC),fontFamily: "Roboto",fontSize: 12),
-                                      //  hintText: "",hintStyle: const TextStyle(color: Color(0XFF011627),fontFamily: "Roboto",fontSize: 14),
-                                      fillColor: Color(0XFF011627).withOpacity(0.44),filled: true,
-                                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: const Color(0XFF011627).withOpacity(0.44),
-                                          style:BorderStyle.none )),
-                                    ),)
-                                ),
-                                SizedBox(
-
-                                ),
-                                Container(
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  SizedBox(
+                                    width: 0.04*MediaQuery.of(context).size.width,
+                                  ),
+                                  Container(
                                     height: 36,
-                                    width: 0.20 * MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width,
-                                    child: FlatButton(color: Colors.blue[200], height: 40,
-                                        child: Center(child: Text("VERIFY",
-                                            style: TextStyle(color: Color(0XFFFDFFFC),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold))),
-                                        onPressed: () {
-                                          print("Send OTP Triggered");
-                                          print(mobileController.text);
-                                          _verifyOtp(_otp.text);
-                                        }
-                                    )
-                                ),
-                                SizedBox(
-                                  width:0.04*MediaQuery.of(context).size.width,
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                                height:15.0
-                            ),
-                            GestureDetector(
-                              child: Center(child: Text("submit".toUpperCase(), 
-                                style: TextStyle(color:Color(0XFFFDFFFC),fontSize: 14,fontWeight: FontWeight.bold))),
-                              onTap: (){
-                                  insert(<String, dynamic>{
-                                    "first_name":fnc.text,
-                                    "last_name":lnc.text,
-                                    "mobile_number":mobileController.text,
-                                    "email":ec.text,
-                                    "password":passwordController.text,
-                                    "user_group":ugc.text,
-                                    "user_type":utyc.text,
-                                    "main_station":msc.text,
-                                    "duty_joined_on": fromDate,
-                                          });
-                                  Navigator.pop(context);
-                                }),
-                         SizedBox(
-                           height:40.0
-                         ),
-                        ])),
+                                    width: 0.35*MediaQuery.of(context).size.width,
+                                    alignment: Alignment.center,
+                                    child:TextField(
+                                      keyboardType: TextInputType.number,
+                                      controller:_otp ,
+                                      decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none,color: Color(0XFF011627).withOpacity(0.44)),),
+                                        disabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none,color: Color(0XFF011627).withOpacity(0.44)),),
+                                        contentPadding: const EdgeInsets.only(left:15),focusColor: Color(0XFF011627).withOpacity(0.44),
+                                        labelText: "  Enter OTP",labelStyle: const TextStyle(color: Color(0XFFFDFFFC),fontFamily: "Roboto",fontSize: 12),
+                                        //  hintText: "",hintStyle: const TextStyle(color: Color(0XFF011627),fontFamily: "Roboto",fontSize: 14),
+                                        fillColor: Color(0XFF011627).withOpacity(0.44),filled: true,
+                                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: const Color(0XFF011627).withOpacity(0.44),
+                                            style:BorderStyle.none )),
+                                      ),)
+                                  ),
+                                  SizedBox(
+
+                                  ),
+                                  Container(
+                                      height: 36,
+                                      width: 0.20 * MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width,
+                                      child: FlatButton(color: Colors.blue[200], height: 40,
+                                          child: Center(child: Text("VERIFY",
+                                              style: TextStyle(color: Color(0XFFFDFFFC),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold))),
+                                          onPressed: () {
+                                            print("Send OTP Triggered");
+                                            print(mobileController.text);
+                                            _verifyOtp(_otp.text);
+                                          }
+                                      )
+                                  ),
+                                  SizedBox(
+                                    width:0.04*MediaQuery.of(context).size.width,
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                  height:15.0
+                              ),
+                              GestureDetector(
+                                child: Center(child: Text("submit".toUpperCase(), 
+                                  style: TextStyle(color:Color(0XFFFDFFFC),fontSize: 14,fontWeight: FontWeight.bold))),
+                                onTap: (){
+                                    insert(<String, dynamic>{
+                                      "first_name":fnc.text,
+                                      "last_name":lnc.text,
+                                      "mobile_number":mobileController.text,
+                                      "email":ec.text,
+                                      "password":passwordController.text,
+                                      "user_group":ugc.text,
+                                      "user_type":utyc.text,
+                                      "main_station":msc.text,
+                                      "duty_joined_on": fromDate,
+                                            });
+                                    Navigator.pop(context);
+                                  }),
+                           SizedBox(
+                             height:40.0
+                           ),
+                          ]),
+                        )),
                        
 
             ],),
@@ -253,9 +283,12 @@ class _SignUPState extends State<SignUP> {
     
      );
   }
-  Widget textField(TextEditingController a,String b,){
-    return TextField(
+  Widget textField(TextEditingController a,String b, String no){
+    return TextFormField(
                         controller:a ,
+                          //validator: (emial) => EmailV ? "Please Enter A Valid ${b}" : null,
+                        //validator:(a.text){ (no=="1")? emailValid:(no=="3")? passwordValidator:(no=="4")?phoneValidator:validator2},
+                        validator:(no=="1")?validator1:(no=="4")?validator2:(no=="3")?passvali:validate,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none,color: Color(0XFF011627).withOpacity(0.44)),),
                           disabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none,color: Color(0XFF011627).withOpacity(0.44)),),
