@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:train_service/pages/chat_screen.dart';
 import 'package:train_service/pages/profile.dart';
 import 'package:train_service/pages/livelocation.dart';
@@ -9,27 +10,90 @@ import 'package:train_service/widgets/bottomNavBar.dart';
 import 'package:train_service/widgets/widgets.dart';
 
 class WorkHistory extends StatefulWidget {
+  final String uid;
+  const WorkHistory({this.uid});
   @override
   _WorkHistoryState createState() => _WorkHistoryState();
 }
 
 class _WorkHistoryState extends State<WorkHistory> {
-  int _value = 1;
+  List<dynamic> getR;
 
-  List items = [0, 0, 0, 0];
+  @override
+  Widget build(BuildContext context) {
+    final HttpLink httpLink = HttpLink(
+      uri: "https://servicemanag.herokuapp.com",
+    );
+    final ValueNotifier<GraphQLClient> client = ValueNotifier<GraphQLClient>(
+      GraphQLClient(
+        link: httpLink,
+        cache: OptimisticCache(
+          dataIdFromObject: typenameDataIdFromObject,
+        ),
+      ),
+    );
+
+    return GraphQLProvider(
+      client: client,
+      child: Scaffold(
+        body: Query(
+            options: QueryOptions(document: r"""
+            query getR($_id:ID!){
+                workHistory(_id:$_id){
+                  _id
+                  user
+                  duty_date
+                  setno
+                  actual_sign_on
+                  actual_sign_off
+                }
+            }""", variables: <String, dynamic>{"_id": "${widget.uid}"}),
+            builder: (
+              QueryResult result, {
+              Refetch refetch,
+              FetchMore fetchMore,
+            }) {
+              if (result.hasException)
+                return Center(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.wifi_off,
+                        ),
+                        Text("no internet")
+                      ]),
+                );
+
+              // ignore: dead_code
+              if (result.loading)
+                return Center(child: CircularProgressIndicator());
+
+              getR = result.data["workHistory"];
+
+              return History(getR: getR, uid: widget.uid);
+            }),
+      ),
+    );
+  }
+}
+
+class History extends StatefulWidget {
+  final List getR;
+  final String uid;
+
+  const History({Key key, this.getR, this.uid}) : super(key: key);
+  @override
+  _HistoryState createState() => _HistoryState();
+}
+
+class _HistoryState extends State<History> {
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Color(0xFF011627),
-      extendBodyBehindAppBar: false,
-      appBar: new AppBar(
-        automaticallyImplyLeading: false,
-        title: topRow(context),
-        elevation: 0,
-        backgroundColor: Color(0xFF011627),
-      ),
       body: Stack(
         children: [
           Positioned(
@@ -37,12 +101,6 @@ class _WorkHistoryState extends State<WorkHistory> {
             child: Container(
                 height: screenHeight,
                 width: screenWidth,
-                decoration: BoxDecoration(
-                    color: Color(0xFF011627),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40),
-                      topRight: Radius.circular(40),
-                    )),
                 child: workHistoryBody()),
           ),
           Align(
@@ -79,7 +137,7 @@ class _WorkHistoryState extends State<WorkHistory> {
                 w: () => Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => Search1(),
+                        pageBuilder: (_, __, ___) => Search1(uid: widget.uid),
                         transitionDuration: Duration(seconds: 0))),
               )),
         ],
@@ -92,244 +150,171 @@ class _WorkHistoryState extends State<WorkHistory> {
     var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Color(0xFF011627),
+      extendBodyBehindAppBar: false,
+      appBar: new AppBar(
+        automaticallyImplyLeading: false,
+        title: topRow(context),
+        elevation: 0,
+        backgroundColor: Color(0xFF011627),
+      ),
       body: Container(
-          height: screenHeight,
-          width: screenWidth,
-          decoration: BoxDecoration(
-              color: Color(0XFFFdFFFC),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
-              )),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: head("work history"),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: Colors.grey[300],
-                  ),
-                  height: screenHeight * 0.04,
-                  width: screenWidth * 0.25,
-                  child: DropdownButton(
-                    underline: Container(
-                      color: Colors.transparent,
-                    ),
-                    hint: Text(
-                      "Choose",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+        height: screenHeight,
+        width: screenWidth,
+        decoration: BoxDecoration(
+            color: Color(0XFFFdFFFC),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(40),
+              topRight: Radius.circular(40),
+            )),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: head("Work history"),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+              child: Container(
+                width: screenWidth,
+                height: screenHeight * 0.05,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      width: screenWidth * 0.4,
+                      height: screenHeight * 0.05,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(20),
+                            bottomRight: Radius.circular(20)),
+                        color: Color(0xfff4f5f9),
                       ),
                     ),
-                    value: _value,
-                    items: [
-                      DropdownMenuItem(
-                        child: Text(
-                          "1st",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        value: 1,
-                        onTap: () {
-                          setState(() {
-                            items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-                          });
-                        },
+                    Icon(
+                      Icons.arrow_forward,
+                      size: 30,
+                    ),
+                    Container(
+                      width: screenWidth * 0.4,
+                      height: screenHeight * 0.05,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            bottomLeft: Radius.circular(20)),
+                        color: Color(0xfff4f5f9),
                       ),
-                      DropdownMenuItem(
-                        child: Text(
-                          "2nd",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        value: 2,
-                        onTap: () {
-                          setState(() {
-                            items = [6, 7, 8, 9, 10];
-                          });
-                        },
-                      ),
-                      DropdownMenuItem(
-                        child: Text(
-                          "3rd",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        value: 3,
-                        onTap: () {
-                          setState(() {
-                            items = [11, 12, 13, 14, 15];
-                          });
-                        },
-                      ),
-                      DropdownMenuItem(
-                        child: Text(
-                          "4th",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        value: 4,
-                        onTap: () {
-                          setState(() {
-                            items = [16, 26, 36, 45, 45];
-                          });
-                        },
-                      ),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        _value = value;
-                      });
-                    },
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              Expanded(
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    setState(() {
-                      items = [
-                        1,
-                        2,
-                        3,
-                        4,
-                        5,
-                        6,
-                        7,
-                        8,
-                        9,
-                        10,
-                        16,
-                        26,
-                        36,
-                        45,
-                        45
-                      ];
-                    });
-                    await _refresh_work_history();
-                  },
-                  child: ListView.builder(
-                    itemCount: items.length,
-                    itemBuilder: (BuildContext context, int i) {
-                      return Column(
-                        children: [
-                          Container(
-                            color: Color(0xfff4f5f9),
-                            height: 110,
-                            padding: EdgeInsets.all(10),
-                            child: Column(
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: widget.getR.length,
+                itemBuilder: (context, i) {
+                  return Column(
+                    children: [
+                      Container(
+                        color: Color(0xfff4f5f9),
+                        height: 100,
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Duty date: ",
+                                    style: TextStyle(
+                                        color: Colors.blueGrey,
+                                        fontSize: 15,
+                                        fontFamily: "Norwester",
+                                        fontWeight: FontWeight.w900),
+                                  ),
+                                  Text(
+                                    widget.getR[i]["duty_date"],
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: screenHeight * 0.02,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Column(
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15.0),
-                                          child: AutoSizeText("DATES",
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.blueGrey,
-                                                fontFamily: "Norwester",
-                                              )),
-                                        ),
-                                        AutoSizeText(
-                                            "   " + items[i].toString(),
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.blueGrey,
-                                              fontFamily: "Norwester",
-                                            )),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        AutoSizeText("SET NO",
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.blueGrey,
-                                              fontFamily: "Norwester",
-                                            )),
-                                        AutoSizeText(items[i].toString(),
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.blueGrey,
-                                              fontFamily: "Norwester",
-                                            )),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 15.0),
-                                      child: Column(
-                                        children: [
-                                          AutoSizeText("TYPE",
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.blueGrey,
-                                                fontFamily: "Norwester",
-                                              )),
-                                          AutoSizeText(items[i].toString(),
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.blueGrey,
-                                                fontFamily: "Norwester",
-                                              )),
-                                        ],
+                                    Text(
+                                      "Set no: ",
+                                      style: TextStyle(
+                                        color: Colors.blueGrey,
+                                        fontSize: 15,
+                                        fontFamily: "Norwester",
                                       ),
                                     ),
+                                    Text(widget.getR[i]["setno"])
                                   ],
                                 ),
-                                SizedBox(height: 5),
-                                new Container(
-                                  height: 45,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.grey.withOpacity(0.20),
-                                  ),
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(10.0),
-                                  child: AutoSizeText(
-                                    "    " + items[i].toString(),
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.black,
-                                    ),
-                                  ),
+                                Text(
+                                  "|",
+                                  style: TextStyle(
+                                      fontSize: 28, color: Colors.grey),
                                 ),
-                                //SizedBox(height:5),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Signin time: ",
+                                      style: TextStyle(
+                                        color: Colors.blueGrey,
+                                        fontSize: 15,
+                                        fontFamily: "Norwester",
+                                      ),
+                                    ),
+                                    Text(widget.getR[i]["actual_sign_on"]),
+                                  ],
+                                ),
+                                Text(
+                                  "|",
+                                  style: TextStyle(
+                                      fontSize: 28, color: Colors.grey),
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Sign off time: ",
+                                      style: TextStyle(
+                                        color: Colors.blueGrey,
+                                        fontSize: 15,
+                                        fontFamily: "Norwester",
+                                      ),
+                                    ),
+                                    Text(widget.getR[i]["actual_sign_off"]),
+                                  ],
+                                ),
                               ],
-                            ),
-                          ),
-                          Container(
-                            color: Colors.white,
-                            height: 2,
-                            width: double.infinity,
-                          )
-                        ],
-                      );
-                    },
-                  ),
-                ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        color: Colors.white,
+                        height: 2,
+                        width: double.infinity,
+                      )
+                    ],
+                  );
+                },
               ),
-              SizedBox(height: 130)
-            ],
-          )),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
