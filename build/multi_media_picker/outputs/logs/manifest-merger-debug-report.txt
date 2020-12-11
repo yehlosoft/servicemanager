@@ -1,0 +1,45 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:1:1-17:12
+INJECTED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:1:1-17:12
+INJECTED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:1:1-17:12
+	package
+		ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:2:3-39
+		INJECTED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml
+		INJECTED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:1:11-69
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:3:5-80
+	android:name
+		ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:3:22-78
+uses-permission#android.permission.CAMERA
+ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:4:5-64
+	android:name
+		ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:4:22-62
+application
+ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:6:5-16:19
+provider#com.javih.multimediapicker.MultiMediaFileProvider
+ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:7:9-15:20
+	android:grantUriPermissions
+		ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:11:13-47
+	android:authorities
+		ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:9:13-74
+	android:exported
+		ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:10:13-37
+	android:name
+		ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:8:13-77
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:12:13-14:74
+	android:resource
+		ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:14:17-72
+	android:name
+		ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml:13:17-67
+uses-sdk
+INJECTED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml
+INJECTED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml
+		ADDED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml
+		INJECTED from C:\src\flutter\.pub-cache\hosted\pub.dartlang.org\multi_media_picker-0.2.3\android\src\main\AndroidManifest.xml
